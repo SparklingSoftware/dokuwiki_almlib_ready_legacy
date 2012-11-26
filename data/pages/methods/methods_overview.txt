@@ -1,0 +1,10 @@
+
+
+
+===== Methods overview =====
+
+[[:methods:Agile:Introduction|Agile]]
+[[:methods:Waterfall:Introduction|Waterfall]]
+[[:methods:rup|Rational Unified Process (RUP)]]
+[[:methods:openup|Open Unified Process (OpenUP)]]
+

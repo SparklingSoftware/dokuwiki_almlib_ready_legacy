@@ -1,5 +1,13 @@
-﻿data/cache/
-data/cache
+﻿
+lib/tpl
+
+data/attic/
+data/cache/
 data/index/
+data/locks/
 data/meta/
-lib/tpl/
+data/media_attic/
+data/media_meta/
+data/tmp/
+
+
