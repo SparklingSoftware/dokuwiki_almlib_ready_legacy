@@ -1,0 +1,159 @@
+/* en: Place for user defined CSS rules (screen media) - this file can safely be
+   preserved when updating. See README for details.
+   
+   de: Ort für benutzerdefinierte CSS-Regeln (screen media) - Diese Datei kann
+   beim Durchführen von Updates ohne Risiko beibehalten werden. Konsultieren Sie
+   die README für Detailinformationen. */
+   body {/*background-color:#e99332;*/}
+   p {background-color:#434240; color:#FFF;}
+   h1 {background:#434241;color:#FFF;}
+   #config__manager {background:#434241; color:#FFF;}
+   #mediamanager_page {background:#434241; color:#FFF;}
+   #content{background-color:#434241;}
+   div.dokuwiki p{
+   background-color:#434241;
+   }
+/*
+html {
+ /*background-color:#ee9332; 
+ /*background: url(user/tail.gif) 0 0 ;
+background-repeat="repeat-y";
+  width:100%;
+  height:100%
+  color: __text__;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+  }
+ 
+button{
+color:red;
+} *//*
+table{/*
+color: white;
+background-color:#434241;
+border-color:#AF7817;
+}
+/*
+#table div.even{background-color:#FFF380;}*/
+th {/*
+color: white;*/
+background-color:#AF7817;
+border-color:silver;
+}
+tr:nth-child(odd)    { background-color:#3b3131;border-color:silver; }
+tr:nth-child(even)    { background-color:#565051; border-color:silver;}
+td{border-color:silver;}
+/* footnotes */
+div.dokuwiki div.fn {
+  font-size: 90%;
+  color: #f9f9f9;
+  /*background-color: #434241;*/
+}
+div#content .dokuwiki pre,
+div#content .dokuwiki pre.code,
+div#content .dokuwiki pre.file {
+  line-height: 1.2em;
+  padding: 0.5em;
+  border-style: dashed;
+  background-color: #2e2e2e;
+  color: #fff;
+}
+div#content .dokuwiki h1,
+div#content .dokuwiki h2,
+div#content .dokuwiki h3,
+div#content .dokuwiki h4,
+div#content .dokuwiki h5,
+div#content .dokuwiki h6 {
+  border-bottom: 1px solid #aaa;
+  color: __text__;
+  margin: 0;
+  padding-bottom: 0.17em;
+  padding-top: 0.5em;
+  background-color: #434241;
+}
+div#content .dokuwiki div.level1,
+div#content .dokuwiki div.level2,
+div#content .dokuwiki div.level3,
+div#content .dokuwiki div.level4,
+div#content .dokuwiki div.level5 {
+  margin-left: 0;
+  background-color:#434241;
+}
+div#column-one .portlet .pBody ul {
+  font-size: 95%;
+  line-height: 1.5em;
+  list-style-image: url(static/3rd/monobook/bullet.gif);
+  list-style-type: square;
+  margin: 0.3em 0 0 1.5em;
+  padding: 0;
+}
+html>body button.toolbutton {
+ /* background: __background__ url(static/3rd/dokuwiki/buttonshadow.png) repeat-x bottom;
+*/}
+
+div#column-one .portlet .pBody a {
+  background-color: transparent none no-repeat scroll 0 0;
+  color: #f9f9f9;
+  text-decoration: none;
+  border-bottom: 0 none !important;
+}
+div#column-one .portlet .pBody a:visited {
+  color: #f9f9f9;
+  
+}
+div.dokuwiki #toc__inside {
+  border: 1px solid __border__;
+  background-color: #2e2e2e;
+  text-align: left;
+  color:#f9f9f9;
+  padding: 0.5em 0 0.7em 0;
+}
+div.dokuwiki a.toc:link,
+div.dokuwiki a.toc:visited {
+  color: #f9f9f9;
+}
+
+div.dokuwiki  {
+background-color:#434241 ;
+padding-left:8px;
+padding-right:8px;
+padding-top:8px;
+padding-bottom:28px;
+border:0px;
+margin-left:-12px;
+margin-right:-12px;
+margin-bottom:-26px;
+}
+html>body div.dokuwiki textarea.edit {
+  background: white /*url(static/3rd/dokuwiki/inputshadow.png) repeat-x top*/;
+  color: black;
+}/*
+ table.inline {
+  font-size: 100%;
+  color: white;
+  background-color:#434241;
+  border-spacing: 0px;
+  border-collapse: collapse;
+}
+table.inline th {
+  padding: 3px;
+  border: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  color: white;
+  background-color:gold;
+}
+table.inline td {
+  padding: 3px;
+  border: 1px solid #000000;
+}
+.leftalign {
+  text-align: left;
+}
+.centeralign {
+  text-align: center;
+}
+.rightalign {
+  text-align: right;
+}*/

@@ -1,0 +1,32 @@
+/* en: Place for user defined CSS rules (screen media) - this file can safely be
+   preserved when updating. See README for details.
+   
+   de: Ort für benutzerdefinierte CSS-Regeln (screen media) - Diese Datei kann
+   beim Durchführen von Updates ohne Risiko beibehalten werden. Konsultieren Sie
+   die README für Detailinformationen. */
+/*
+*{ padding:0; margin:0;}
+	html { font-size:100.01%;}
+	body { font-size:62.5%; font-family: Arial, Helvetica, sans-serif; 
+	background-image:url('\lib\tpl\monobook\user\tail.gif') repeat-y 0 0 #ee9332; color:#d3cbc6;}
+/*
+//background-color: #ee9332;
+	*/
+
+html {
+  background: #f9f9f9 url(user/tail.gif) 0 0 ;
+  background-repeat="repeat-y";
+  width: 100%;
+  height:100%;
+    color: __text__;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+  }/*
+body {
+  background: #f9f9f9 url(user/headbg.jpg) 0 0 no-repeat;
+ width: 100%;
+ height:100%
+
+}*/
