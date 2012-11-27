@@ -1,30 +1,36 @@
-**About ALM Stds Lib**
-[[:start|Introduction]] 
+**About NAVIGATE Lib**
+[[:introduction|Introduction]] 
 [[:contribute|Contribute]]
-[[:download|Download an Instance]]
+
 
 **Navigate by:**
-[[:process:alm_process|ALM Process]]
-[[:process:process|Process]]
-[[:roles:alm_roles_overview|Roles within ALM]]
+[[:process|Process]]
+[[:roles:alm_roles_overview|Roles]]
 [[:frameworks:overview|Frameworks and BOKs]]
 [[:methods:methods_overview|Methods]]
 [[:maturity:maturity_overview|Maturity]]
 [[:continuous_delivery:continuous_delivery_overview|Continuous Delivery]]
 [[:tools:overview|Tools]]
-[[:metrics and reporting:Overview|Metrics and Reporting]]
-[[:knowledge management|Knowledge Mgmt]]
+[[:metrics and reporting:overview|Metrics and Reporting]]
+[[:knowledge management|knowledge mgmt]]
+[[:job_aids:artefacts|Alphabitical]]
 
-**Assessments:**
-[[:risk assessments|Risk Assessments]]
-
-**Alphabetical**
-[[:job_aids:Artefacts|Artefacts]]
+**Adoption:**
+[[:adoption:training|Training]]
+[[:adoption:adoption plans|Adoption Plans]]
+[[:adoption:self assessments|Self Assessments]]
+[[:adoption:governance|Governance]]
 
 **General**
 [[:general:frequently asked questions|FAQ]]
 [[:general:glossary|Glossary]]
 
 **Admin**
-[[:wiki:admin|Admin pages]]
+[[:wiki:orphans|Orphaned pages]]
+[[:wiki:pages wanted|Pages Wanted]]
+[[:wiki:revisions|Pages up for revision]]
+[[:wiki:statistics|Usage Statistics]]
+[[:wiki:workspaces|Workspaces]]
+[[:wiki:git:masterstatus|GIT - Master]]
+[[:wiki:git:localstatus|GIT - Local]]
 

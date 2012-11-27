@@ -1,0 +1,3 @@
+<?php
+
+$conf['HideNonWikiPages'] = true;
