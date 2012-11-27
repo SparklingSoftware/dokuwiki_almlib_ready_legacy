@@ -160,7 +160,7 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
 
             $renderer->doc .= "<tr><td>";
             
-            $change = substr($file, 0, 3);
+            $change = substr($file, 0, 2);
             if (strpos($change, '?') !== false)
                 $renderer->doc .= "Added:";
             else if (strpos($change, 'M') !== false)
@@ -173,7 +173,7 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
                 $renderer->doc .= "Removed:";
             
             $renderer->doc .= "</td><td>";
-            $file = substr($file, 3);
+            $file = trim(substr($file, 2));
             $page = $this->getPageFromFile($file);            
             $renderer->doc .=  '<a href="http://localhost:8002/doku.php?id='.$page.'">'.$page.'</a>';
             $renderer->doc .= "</td><td>";
