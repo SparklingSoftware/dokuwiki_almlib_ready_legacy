@@ -71,7 +71,7 @@ class helper_plugin_branches extends DokuWiki_Plugin {
     {
         if ($this->jira === null) return;
         
-        $improvements = $this->jira->getJiraData("");
+        $improvements = $this->jira->getJiraData('project = SEPG AND (status = "In Progress" or status = "Awaiting Signoff") ORDER BY key');
         return $improvements;
     }
 
