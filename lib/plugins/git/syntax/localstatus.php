@@ -108,9 +108,8 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
 
                     $renderer->doc .= '<h3>Commit message:</h3>';        
                     $renderer->doc .= $message.'<textarea>';        
-                    $message = $commits[0]['message'];
-                    $renderer->doc .= $message.'</textarea>';                            
-                    $renderer->doc .= $message.'<br/>';        
+                    $renderer->doc .= $commits[0]['message'];
+                    $renderer->doc .= '</textarea><br/>';        
 
                     // Show the approval sections
                     $this->renderChangesMade($renderer, $files, $repo);
