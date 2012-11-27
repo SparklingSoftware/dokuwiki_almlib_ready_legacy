@@ -106,8 +106,10 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
                     $hash = $commits[0]['hash'];
                     $files = explode("\n", $repo->get_files_by_commit($hash));                   
 
-                    $renderer->doc .= '<h2>Commit message:</h2>';        
+                    $renderer->doc .= '<h3>Commit message:</h3>';        
+                    $renderer->doc .= $message.'<textarea>';        
                     $message = $commits[0]['message'];
+                    $renderer->doc .= $message.'</textarea>';                            
                     $renderer->doc .= $message.'<br/>';        
 
                     // Show the approval sections
