@@ -21,8 +21,9 @@ class action_plugin_branches_removebranch extends DokuWiki_Action_Plugin {
         global $conf;
         
         $branch_id = $_GET['remove_branch'];
-        $redirect_url = $conf['plugin']['branch']['manage_branches_url'];
-        if ($redirect_url === '') $redirect_url = "/master"; 
+        //$redirect_url = $conf['plugin']['branch']['manage_branches_url'];
+        //if ($redirect_url === '') 
+        $redirect_url = "/master"; 
         
         if ($branch_id)
         {
