@@ -1,0 +1,21 @@
+3rd Party Software & Licenses used by Rigrr
+===========================================
+
+Google Web Toolkit (GWT)
+Copyright 2012 Google Inc.
+https://developers.google.com/web-toolkit
+Apache License v. 2.0: http://www.apache.org/licenses/LICENSE-2.0.txt
+Information regarding bundled 3rd party software: https://developers.google.com/web-toolkit/terms#licenses
+
+gwt-graphics
+Copyright 2012 Henri Kerola
+http://code.google.com/p/gwt-graphics
+Apache License v. 2.0: http://www.apache.org/licenses/LICENSE-2.0.txt
+
+jQuery
+Copyright 2012 jQuery Foundation and other contributors
+http://jquery.com
+https://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt
+
+
+
