@@ -1,7 +1,7 @@
  
-test 1 2 3 4 5 6
+test 1 2 3 
 
-<riggr>
+<rigrr>
 
 <?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
 <semantic:definitions id="_1275940932088" targetNamespace="http://www.trisotech.com/definitions/_1275940932088" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:semantic="http://www.omg.org/spec/BPMN/20100524/MODEL">
@@ -387,4 +387,6 @@ test 1 2 3 4 5 6
     </bpmndi:BPMNDiagram>
 </semantic:definitions>
 
-</riggr>
+</rigrr>
+
+

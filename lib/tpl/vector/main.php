@@ -482,6 +482,8 @@ if (file_exists(DOKU_TPLINC."lang/".$conf["lang"]."/style.css")){
 }
 ?>
 <!--[if lt IE 7]><style type="text/css">body{behavior:url("<?php echo DOKU_TPL; ?>static/3rd/vector/csshover.htc")}</style><![endif]-->
+
+
 </head>
 <body class="<?php
              //different styles/backgrounds for different page types

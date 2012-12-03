@@ -40,11 +40,11 @@ class action_plugin_branches_javascript extends DokuWiki_Action_Plugin {
 		$data = $this->switch_branch_javascript();
         ptln($data);
 
-		$event->data['script'][] = array(
-			'type' => 'text/javascript',
-			'charset' => 'utf-8',
-			'_data' => $data,
-		);
+		//$event->data['script'][] = array(
+		//	'type' => 'text/javascript',
+		//	'charset' => 'utf-8',
+		//	'_data' => $data,
+		//);
 	}
     
 }
