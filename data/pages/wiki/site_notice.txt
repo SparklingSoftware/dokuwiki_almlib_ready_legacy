@@ -1,1 +1,2 @@
-~~NOCACHE~~The Instant ALM website is part of the [[http://www.alm-community.org|Global ALM Community]] and provided by [[http://www.sparklingsoftware.com.au|SparklingSoftware]] ~~branches_select~~
+~~NOCACHE~~The Instant ALM website is part of the [[http://www.alm-community.org|Global ALM Community]] and provided by [[http://www.sparklingsoftware.com.au|{{:wiki:ssw_logo_transparent-300x100.png?direct|SparklingSoftware}}]] [[http://www.sparklingsoftware.com.au/contact-us/|Contact]] us if you need help installing this library on-premise!
+
