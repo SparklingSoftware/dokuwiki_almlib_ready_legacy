@@ -1,5 +1,5 @@
 **About NAVIGATE Lib**
-[[:introduction|Introduction]] 
+[[:start|Introduction]] 
 [[:contribute|Contribute]]
 
 **Navigate by:**
