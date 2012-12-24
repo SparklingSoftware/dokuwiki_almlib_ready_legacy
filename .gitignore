@@ -9,3 +9,4 @@ data/media_meta/
 data/tmp/
 
 conf/local.php.bak
+conf/local.protected.php

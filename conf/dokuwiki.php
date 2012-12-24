@@ -11,7 +11,6 @@
  * see http://www.dokuwiki.org/config
  */
 
-
 /* Basic Settings */
 $conf['title']       = 'DokuWiki';        //what to show in the title
 $conf['start']       = 'start';           //name of start page

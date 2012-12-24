@@ -70,16 +70,17 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
         
         Jira_Autoloader::register();
 
-        //$jiraURL = $conf['plugin']['jiradata']['jira_url'];
-        $jiraURL = 'http://jira.global.thenational.com';        
-        
+        $jiraURL = $this->getConf('jira_url');    
+        $username = $this->getConf('jira_username');    
+        $password = $this->getConf('jira_password');    
+
         $api = new Jira_Api(
             $jiraURL,
-            new Jira_Api_Authentication_Basic("sdekker", "secret123")
+            new Jira_Api_Authentication_Basic($username, $password)
         );
 
         $walker = new Jira_Issues_Walker($api);
-        $walker->push($jql, "key,summary");
+        $walker->push($jql, "key,summary,description");
         $walker->valid();
         
         $table = array();
@@ -89,8 +90,7 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
             // Get the values from the JIRA issue
             $key = $walker->current()->getKey(); 
             $summary = $walker->current()->getSummary(); 
-//            $description = $walker->current()->getDescription(); 
-            $description = 'todo';
+            $description = $walker->current()->getDescription(); 
 
             // Copy the values into a result row
             $row = array(
