@@ -1,129 +1,26 @@
 ===== How to Contribute =====
 
+Thanks for considering to contribute! This library could not exist without the help of all the people who have contributed. These are not just words, we really mean it. Please read the [[:general:core commitments|core commitments]] for more information why contributors are vital.
 
+The Process Improvement Infrastructure (PII) tries to make it as simple as possible to contribute. However, the key to standards is reaching agreements and in order to reach agreement (usually via consensus) some process is needed. The same process also helps prevent inefficiencies in making process improvements itself. Drinking out own champagne if you will.
 
-In enterprise organisations it is recommended to use the "Branches" plugin and follow the following workflow:
+The PII that the ALM Community uses follows a very lean process where pretty much every step is optional. It really depends on your organization to what rigor you want to implement the process. As everything, this library also allows you to customise the PII process as you see fit.
 
+**It is however STRONGLY encouraged to keep the process as simple as possible, in particular approvals.**
+
+The reason is that approvals really kills progress. Lean processes make it possible to quickly implement improvements, which increases motivation for people to contribute more. Approvals does the exact opposite.
+
+Having said that, some approval steps are very useful. When dealing for silo's for instance (In the ALM space, that could be Dev, Test, BA, Project Managers), it is a good idea to make it mandatory for all silo's to approve changes. That way, all silo's will sooner or later realise they are part of a bigger organization and they are not the center of the universe. The still keep progress in the back of our minds, these approvals should happen during a meeting where all approvers are invited. Non attendance means approval by absence.
+
+Good, with that out of the way, let's have a look at the suggested process at a high level.
+(You can click on the steps for more details about the underlying process)
 
 <rigrr>
 
+<Definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" targetNamespace="http://rapilabs.com/definitions/20120204" name="High Level PII Process"><Process id="3"><StartEvent id="2" name="Great Idea"/><SubProcess id="5" name="Submit and Screen Improvement"><Documentation textFormat="text/x-url">/doku.php?id=contribute:submit_idea</Documentation></SubProcess><Task id="7" name="Discuss Improvement by SEPG"/><ExclusiveGateway id="9" name="Work on it now?"/><Task id="11" name="Determine Deliverables / Funding needed"/><Task id="13" name="Deliverables approved by SEPG"/><SubProcess id="15" name="Do Work"><Documentation textFormat="text/x-url">/doku.php?id=contribute:do_work</Documentation></SubProcess><Task id="17" name="Approval by SEPG"/><EndEvent id="19" name="Improvement Implemented"/><SequenceFlow id="18" sourceRef="17" targetRef="19"/><SequenceFlow id="16" sourceRef="15" targetRef="17"/><SequenceFlow id="14" sourceRef="13" targetRef="15"/><SequenceFlow id="12" sourceRef="11" targetRef="13"/><SequenceFlow id="10" sourceRef="9" targetRef="11"/><Task id="21" name="Park Improvement for later"/><IntermediateCatchEvent id="23" name="Start of Iteration"><TimerEventDefinition id="24"/></IntermediateCatchEvent><SequenceFlow id="25" sourceRef="23" targetRef="9"/><SequenceFlow id="22" sourceRef="21" targetRef="23"/><SequenceFlow id="20" sourceRef="9" targetRef="21"/><SequenceFlow id="8" sourceRef="7" targetRef="9"/><SequenceFlow id="6" sourceRef="5" targetRef="7"/><SequenceFlow id="4" sourceRef="2" targetRef="5"/></Process><bpmndi:BPMNDiagram id="rigrr.rapilabs.com"><bpmndi:BPMNPlane bpmnElement="3"><bpmndi:BPMNShape bpmnElement="2"><dc:Bounds x="30" y="247" width="40" height="40"/></bpmndi:BPMNShape><bpmndi:BPMNShape bpmnElement="5"><dc:Bounds x="104" y="227" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNShape bpmnElement="7"><dc:Bounds x="235" y="227" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNShape bpmnElement="9"><dc:Bounds x="450" y="242" width="50" height="50"/></bpmndi:BPMNShape><bpmndi:BPMNShape bpmnElement="11"><dc:Bounds x="546" y="227" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNShape bpmnElement="13"><dc:Bounds x="682" y="227" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNShape bpmnElement="15"><dc:Bounds x="817" y="227" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNShape bpmnElement="17"><dc:Bounds x="951" y="227" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNShape bpmnElement="19"><dc:Bounds x="1126" y="247" width="40" height="40"/></bpmndi:BPMNShape><bpmndi:BPMNEdge bpmnElement="18"><di:Waypoint x="1051" y="267"/><di:Waypoint x="1126" y="267"/></bpmndi:BPMNEdge><bpmndi:BPMNEdge bpmnElement="16"><di:Waypoint x="917" y="267"/><di:Waypoint x="951" y="267"/></bpmndi:BPMNEdge><bpmndi:BPMNEdge bpmnElement="14"><di:Waypoint x="782" y="267"/><di:Waypoint x="817" y="267"/></bpmndi:BPMNEdge><bpmndi:BPMNEdge bpmnElement="12"><di:Waypoint x="646" y="267"/><di:Waypoint x="682" y="267"/></bpmndi:BPMNEdge><bpmndi:BPMNEdge bpmnElement="10"><di:Waypoint x="500" y="267"/><di:Waypoint x="546" y="267"/></bpmndi:BPMNEdge><bpmndi:BPMNShape bpmnElement="21"><dc:Bounds x="425" y="352" width="100" height="80"/></bpmndi:BPMNShape><bpmndi:BPMNShape bpmnElement="23"><dc:Bounds x="337" y="372" width="40" height="40"/></bpmndi:BPMNShape><bpmndi:BPMNEdge bpmnElement="25"><di:Waypoint x="357" y="372"/><di:Waypoint x="450" y="267"/></bpmndi:BPMNEdge><bpmndi:BPMNEdge bpmnElement="22"><di:Waypoint x="425" y="392"/><di:Waypoint x="377" y="392"/></bpmndi:BPMNEdge><bpmndi:BPMNEdge bpmnElement="20"><di:Waypoint x="475" y="292"/><di:Waypoint x="475" y="352"/></bpmndi:BPMNEdge><bpmndi:BPMNEdge bpmnElement="8"><di:Waypoint x="335" y="267"/><di:Waypoint x="450" y="267"/></bpmndi:BPMNEdge><bpmndi:BPMNEdge bpmnElement="6"><di:Waypoint x="204" y="267"/><di:Waypoint x="235" y="267"/></bpmndi:BPMNEdge><bpmndi:BPMNEdge bpmnElement="4"><di:Waypoint x="70" y="267"/><di:Waypoint x="104" y="267"/></bpmndi:BPMNEdge></bpmndi:BPMNPlane></bpmndi:BPMNDiagram></Definitions>
 
-
-<Definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" targetNamespace="http://rapilabs.com/definitions/20120204" name="Make Improvements">
-  <Process id="3">
-    <StartEvent id="2" name="Make Improvement"/>
-    <ExclusiveGateway id="5" name="Workspace Exists?"/>
-    <Task id="7" name="Select Workspace"/>
-    <Task id="9" name="Make Changes"/>
-    <Task id="11" name="Submit for approval"/>
-    <Task id="13" name="Workspace becomes read only"/>
-    <Task id="15" name="EMail to SEPG"/>
-    <EndEvent id="17" name="Improvement Submitted"/>
-    <SequenceFlow id="16" sourceRef="15" targetRef="17"/>
-    <SequenceFlow id="14" sourceRef="13" targetRef="15"/>
-    <SequenceFlow id="12" sourceRef="11" targetRef="13"/>
-    <SequenceFlow id="10" sourceRef="9" targetRef="11"/>
-    <SequenceFlow id="18" name="Feedback, Multiple Contributors, etc" sourceRef="9" targetRef="9"/>
-    <SequenceFlow id="8" sourceRef="7" targetRef="9"/>
-    <SequenceFlow id="6" sourceRef="5" targetRef="7"/>
-    <Task id="20" name="Open New workspace page"/>
-    <Task id="22" name="Create workspace for this Improvement"/>
-    <Task id="24" name="User get redirected to workspace"/>
-    <SequenceFlow id="25" sourceRef="24" targetRef="9"/>
-    <SequenceFlow id="23" sourceRef="22" targetRef="24"/>
-    <SequenceFlow id="21" sourceRef="20" targetRef="22"/>
-    <SequenceFlow id="19" sourceRef="5" targetRef="20"/>
-    <SequenceFlow id="4" sourceRef="2" targetRef="5"/>
-  </Process>
-  <bpmndi:BPMNDiagram id="rigrr.rapilabs.com">
-    <bpmndi:BPMNPlane bpmnElement="3">
-      <bpmndi:BPMNShape bpmnElement="2">
-        <dc:Bounds x="65" y="85" width="40" height="40"/>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="5">
-        <dc:Bounds x="204" y="80" width="50" height="50"/>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="7">
-        <dc:Bounds x="331" y="65" width="100" height="80"/>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="9">
-        <dc:Bounds x="472" y="65" width="100" height="80"/>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="11">
-        <dc:Bounds x="638" y="65" width="100" height="80"/>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="13">
-        <dc:Bounds x="788" y="65" width="100" height="80"/>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="15">
-        <dc:Bounds x="938" y="65" width="100" height="80"/>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="17">
-        <dc:Bounds x="1118" y="85" width="40" height="40"/>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge bpmnElement="16">
-        <di:Waypoint x="1038" y="105"/>
-        <di:Waypoint x="1118" y="105"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="14">
-        <di:Waypoint x="888" y="105"/>
-        <di:Waypoint x="938" y="105"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="12">
-        <di:Waypoint x="738" y="105"/>
-        <di:Waypoint x="788" y="105"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="10">
-        <di:Waypoint x="572" y="105"/>
-        <di:Waypoint x="638" y="105"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="18">
-        <di:Waypoint x="572" y="105"/>
-        <di:Waypoint x="522" y="65"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="8">
-        <di:Waypoint x="431" y="105"/>
-        <di:Waypoint x="472" y="105"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="6">
-        <di:Waypoint x="254" y="105"/>
-        <di:Waypoint x="331" y="105"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape bpmnElement="20">
-        <dc:Bounds x="179" y="197" width="100" height="80"/>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="22">
-        <dc:Bounds x="329" y="197" width="100" height="80"/>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="24">
-        <dc:Bounds x="472" y="197" width="100" height="80"/>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge bpmnElement="25">
-        <di:Waypoint x="522" y="197"/>
-        <di:Waypoint x="522" y="145"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="23">
-        <di:Waypoint x="429" y="237"/>
-        <di:Waypoint x="472" y="237"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="21">
-        <di:Waypoint x="279" y="237"/>
-        <di:Waypoint x="329" y="237"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="19">
-        <di:Waypoint x="229" y="130"/>
-        <di:Waypoint x="229" y="197"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="4">
-        <di:Waypoint x="105" y="105"/>
-        <di:Waypoint x="204" y="105"/>
-      </bpmndi:BPMNEdge>
-    </bpmndi:BPMNPlane>
-  </bpmndi:BPMNDiagram>
-</Definitions>
 
 </rigrr>
-
 
 
 

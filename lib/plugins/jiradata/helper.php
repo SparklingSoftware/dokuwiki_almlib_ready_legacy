@@ -80,29 +80,23 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
         );
 
         $walker = new Jira_Issues_Walker($api);
-        $walker->push($jql, "key,summary,description");
-        $walker->valid();
+        $walker->push($jql, "key, summary, description");
+        $walker->valid();        
         
         $table = array();
-        $total = $walker->getTotal();
-        for ($index = 1; $index <= $total; $index++) {
-
-            // Get the values from the JIRA issue
-            $key = $walker->current()->getKey(); 
+        foreach ($walker as $issue) {
+            $key = $walker->current()->getKey();             
             $summary = $walker->current()->getSummary(); 
             $description = $walker->current()->getDescription(); 
-
-            // Copy the values into a result row
+            
             $row = array(
                 "key" => $key, 
                 "title" => $summary, 
                 "description" => $description
             );
-            array_push(&$table, $row);                    
 
-            // Move to the next issue
-            $walker->next();  
-        }
+            array_push(&$table, $row);                    
+        }        
 
         return $table;
     }
