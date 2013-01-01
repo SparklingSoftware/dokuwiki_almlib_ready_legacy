@@ -1,7 +1,7 @@
 
 ~~NOCACHE~~
 <nodisp>
-  <revision_frequency>-5</revision_frequency>
+  <revision_frequency>30</revision_frequency>
 </nodisp>
 
 ====== About the ALM Library ======

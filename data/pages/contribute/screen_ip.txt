@@ -1,0 +1,55 @@
+===== Screen a "New" IP =====
+
+==== Purpose ====
+
+The purpose of this task is to only allow sensible IPs to reach the SEPG and therefor not waste any time of the SEPG meeting.
+As 9 out of 10 IPs tend to be pretty well thought of, just making sure the right wording is used, the numbers make sense, etc is usually all that is needed.
+
+In the odd occasion where things aren't fully clear, a simple email, phone call or short meeting should be enough to clarify the intend of the IP.
+
+This step should take no more than 5-10 minutes in straight forward cases and no more than 30 minutes in more unclear submissions. The idea is to save time in the SEPG meeting, if the preparation takes more time then we would save, then STOP!!! 
+
+At this stage it might all be a waste of time as the IP might not be needed for some reason or might even already be implemented! The seniority of the SEPG members can often lead to much changed insights once discussed, so don't put to much effort in it. 
+
+The IP needs to be JUST details enough (and accurate enough) to be properly discussed, that's all. 
+
+The Analysis phase will go into more details of the IP and will sort out inaccuracies, etc. Don't worry about things too much here.
+
+
+==== What to do ====
+
+
+=== 1. Open the IP ===
+
+As a PIT lead you'll get IPs assigned to you to be "Screened". These IPs have the status "New" so just open the progress tracking tool and find all "New" IPs that have been assigned to your PIT.
+
+[[todo|More detailed instructions on exactly how to do this go here]]
+
+This IP has all the details of the improvement embedded into it.
+
+
+=== 2. Assert the improvement details ===
+
+
+Assert the details of the improvement. For instance:
+  - Does the title accurately reflect the description?
+  - Is the title unambiguous or confusing with other improvements?
+  - Does the improvement make sense to discuss to be implemented? (For instance non IT improvements would be forwarded and closed)
+  - 
+
+  * If more details are needed, don't hesitate to contact the submitter of the improvement.
+  * If an improvement involves more than one PIT, than one PIT screening the IP is enough, unless:
+    * Another PIT is much better positioned to screen the improvement
+
+If the IP doesn't need to be discussed in the SEPG, it can be closed with clear description of the reasons for closing it before even discussing it in the SEPG.
+
+
+=== 3. Move the IP to "Screened" ===
+
+Change the status of the IP from "New" to "Screened".
+
+[[todo|More detailed instructions on exactly how to do this go here]]
+
+
+
+
