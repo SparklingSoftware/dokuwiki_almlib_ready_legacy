@@ -1,11 +1,19 @@
 ===== Do Work =====
 
+All process improvements are basically changes to this wiki. 
 
+In order to keep improvements separated from each other and to allow approvals across multiple pages, each initiative will get it's own workspace, which is an exact copy of the "Live" content.
 
+Once the improvement has been finished in it's own workspace, it can be submitted to the SEPG for approval. A simple step will then merge all the changes into the "Live" content and make it instantly available for everyone to see and use.
 
+Changes of others that have been approved and promoted to "Live" need to be merged into the workspaces before your changes can be submitted for approval. 
+
+Even though this sounds rather complicated, luckily most of the details are hidden behind user friendly screens and forms, so that non technical user will be able to perform these tasks.
+
+The process of making improvements is shown below. Don't be frightened by the number of steps, most of them you would do intuitively anyway!
+The steps are explained below.
 
 <rigrr>
-
 
 
 <Definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" targetNamespace="http://rapilabs.com/definitions/20120204" name="Make Improvements">
@@ -124,4 +132,28 @@
 </rigrr>
 
 
+The process starts when the user wants to make improvements to the library and the SEPG had approved the list of deliverables. The IP has therefore the status "In Progress".
+
+The user will open a browser and open the standards library. As you are reading this, you must have managed that :-)
+
+The first thing to do is check whether a workspace already exist. This is done by clicking on the drop-down list in the top-right corner. The list will at least show "Master" and "Create New" and zero or more IPs to choose from. If the workspace exist, you can select that, otherwise select "Create new". This is the decision in the process map above.
+
+For explanation purposes, let's assume the workspace doesn't exist and we click "Create New". The system will now move you to a page that shows a list of existing workspaces and IPs that are in progress. (You should only work on IPs that are in progress). Administrators have the option to manage the existing workspaces. Every user has the ability to create new workspaces if they do not exist yet. As for this description we were going to create a new workspace, so we select the IP we are going to work on. After creation, we are automatically moved to that new workspace. The library will show an alert message that we are looking at draft content and show a link to the "Live" content.
+
+We can now start to make changes.
+
+Please follow [[:contribute:do work:guidelines|the guidelines for writing content]] in this standards library so a consistent look and feel is maintained throughout the site.
+
+Every content change (including deletes) is stored with your domain login details, so please be mindful of your changes.
+Big Brother is watching you!!
+
+Don't hessitate to ask others to contribute pieces or to discuss the improvements in the [[:contribute:pit:pit meeting|PIT meetings]] so as much rationale behind the changes is captured. (Minute meetings should be stored in the PII Blog, so link above).
+
+Once all changes are made and everyone is happy to submit the proposal to the SEPG for approval, the person leading the initiative will commit all changes. By clicking on the "Submit content" link in the menu on the left, a form will open that shows all changed files (Including all merges from other initiatives). By clicking on the files, the changes are shown between the original and the current. This allows for easy review before submitting for approval.
+
+The submission will lock the workspace and send an email to all SEPG members for review. The reason for locking the workspace is to make sure everyone has been looking at the same content. 
+
+Only the PII Admin role can revert the committed changes and unlock the workspace again. This is as if the commit never happened and the PIT has to commit the changes all over again which will send another notification to the SEPG members.
+
+Read on what happens to you changes on the [[:contribute:approve_deliverables|Approve Deliverables]] page.
 

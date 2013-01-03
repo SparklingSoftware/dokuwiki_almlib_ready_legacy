@@ -14,6 +14,31 @@ The reason is that approvals really kills progress. Lean processes make it possi
 
 Having said that, some approval steps are very useful. When dealing for silo's for instance (In the ALM space, that could be Dev, Test, BA, Project Managers), it is a good idea to make it mandatory for all silo's to approve changes. That way, all silo's will sooner or later realise they are part of a bigger organization and they are not the center of the universe. The still keep progress in the back of our minds, these approvals should happen during a meeting where all approvers are invited. Non attendance means approval by absence.
 
+==== The teams within the PII ====
+
+The following teams and groups are the driving force behind the PII)
+{{ :interaction_between_sepg_pit_msg_and_twg.png?800&nolink |PII Teams}}
+
+**To start with the non-funded world:**
+
+The most important team in the Software Engineering Process Group (SEPG). This group consists of the leads of the all the Process Improvement Teams (PITs). You can read more about the [[:contribute:sepg:sepg introduction|sepg]], but in short: This is the community body where all the decisions are made!
+
+The PITs are the teams (4 to 12 people each) that focus on a particular Process Area to make improvements. Process areas are for instance "Development", "Test", "Project Management", "Procurement", "Fraud", etc. It doesn't really matter what exactly the scope and name of the process area is and whether or not it overlaps with other Process Areas. The important thing is that an "area" of organization is hurting and the PIT is going to improve things.
+
+As said the PIT Lead is a formal member of the SEPG and for practical purposes, a delegate is also also formally chosen. This will help progress of initiatives by having the delegate attend the SEPG meeting if the PIT lead cannot.
+
+The above is expected to happen along normal day-to-day activities and for middle management to encourage all employees to participate in process improvements.)
+
+**funded world:**
+
+The Management Steering Group (MSG) supports the PII both financially and morally (The latter by cascading communications of appreciation, positively including PII Membership in performance conversations, etc).
+
+Obviously supporting initiatives with funding is an important part of the MSG. They can decide to put funding behind some initiatives and thereby speeding up the progress of those improvements. (some initiatives are impossible without funding, so "speeding up" in that case means starting :-)).
+
+The funding isn't handed over the communities. In stead a Technical Working Group (TWG) is formed to implement the improvement. This TWG is a formal project with deadlines, deliverables and outcomes that have to be delivered. The TWG reports into the MSG for financials and prgress, the actually "customer" is the SEPG and they get to sign off on the deliverables. 
+
+This is on a high level how the PII works. If you want to know more about it (as there is much more to it) pleas don't hessitate to [[http://www.sparklingsoftware.com.au/contact-us|contact SparklingSoftware]] as we specialise in implementing PII in big and small organisations.
+
 ==== The high level process ====
 
 Good, with that out of the way, let's have a look at the suggested process at a high level.
@@ -26,11 +51,6 @@ Good, with that out of the way, let's have a look at the suggested process at a 
 
 </rigrr>
 
-
-
-==== References ====
-
-[[http://en.wikibooks.org/wiki/LaTeX/Mathematics |Mathematics Syntax]]
 
 
 

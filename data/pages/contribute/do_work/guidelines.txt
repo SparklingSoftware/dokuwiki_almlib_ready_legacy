@@ -1,0 +1,12 @@
+===== Writing Guidelines =====
+
+
+
+=== Wiki Syntax ===
+
+[[:wiki:syntax|General Wiki Syntax]]
+
+[[http://en.wikibooks.org/wiki/LaTeX/Mathematics |Mathematics Syntax]]
+
+
+
