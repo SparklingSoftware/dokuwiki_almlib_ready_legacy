@@ -1,17 +1,27 @@
 ===== Do Work =====
 
-All process improvements are basically changes to this wiki. 
+Once a PIT is ready to do the work needed for the Improvement and the list of deliverables have been agreed by the SEPG, the Improvement status is changes from "In Analysis" to "In Progress".
+
+Doing work usually means making changes to this wiki, but not always. At the end of day, improvements are intended to streamline all employees future behavior and actions. This doesn't necessarily mean changing this wiki. In fact changing this wiki is just a side effect of what we want to achieve!
+
+If, for instance, a PIT has come to realize that a currently mandated processes of double entering time sheet information in two systems can easily be reduced to one because no one is using the data in one of the two system anymore (Its amazing how often this is actually the case...), then the improvement just means removing the second system from the organization. This will unlikely change this wiki. Keeping history (meeting minutes, approval emails, etc) is extremely important in the scenario above btw as it's not kept in the history of this library.
+
+Having said that, most improvements will impact the process descriptions.
+
+==== Atomic Submission of Changes ====
 
 In order to keep improvements separated from each other and to allow approvals across multiple pages, each initiative will get it's own workspace, which is an exact copy of the "Live" content.
 
 Once the improvement has been finished in it's own workspace, it can be submitted to the SEPG for approval. A simple step will then merge all the changes into the "Live" content and make it instantly available for everyone to see and use.
 
-Changes of others that have been approved and promoted to "Live" need to be merged into the workspaces before your changes can be submitted for approval. 
+Changes that others have submitted, have been approved and are promoted to "Live" need to be merged into the current workspace. This is to ensure "Live" content is not accidentally reversed. Luckily this is nothing new in IT as it is something that software developers have been doing since the 1980s. 
 
-Even though this sounds rather complicated, luckily most of the details are hidden behind user friendly screens and forms, so that non technical user will be able to perform these tasks.
+This wiki hides (most of) the details behind user friendly screens and forms, so that non technical user will be able to perform these tasks. If you do have questions about the steps or you notice unexpected (warning) messages, don't hesitate to contact either the [[:general:glossary:glossary introduction#pii admin|PII Admin]] or someone else familiar with merging files (think: Developer :-)).
 
-The process of making improvements is shown below. Don't be frightened by the number of steps, most of them you would do intuitively anyway!
-The steps are explained below.
+==== The process ====
+
+The process of making improvements is shown below. Don't be frightened by the number of steps, most of them you would do intuitively!
+The steps are explained in more detail just below the diagram.
 
 <rigrr>
 
@@ -134,7 +144,7 @@ The steps are explained below.
 
 The process starts when the user wants to make improvements to the library and the SEPG had approved the list of deliverables. The IP has therefore the status "In Progress".
 
-The user will open a browser and open the standards library. As you are reading this, you must have managed that :-)
+The user will open a browser and open the standards library. If you are reading this in a browser, you must have managed that :-)
 
 The first thing to do is check whether a workspace already exist. This is done by clicking on the drop-down list in the top-right corner. The list will at least show "Master" and "Create New" and zero or more IPs to choose from. If the workspace exist, you can select that, otherwise select "Create new". This is the decision in the process map above.
 
