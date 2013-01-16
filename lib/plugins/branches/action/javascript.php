@@ -23,7 +23,7 @@ class action_plugin_branches_javascript extends DokuWiki_Action_Plugin {
            var selectedValue = document.getElementById("Improvement").value;
            if (selectedValue == "Create new")
            {
-              self.location="/master/doku.php?id=wiki:workspaces";
+              self.location="'.DOKU_URL.'doku.php?id=wiki:workspaces";
            }
            else 
            {   
