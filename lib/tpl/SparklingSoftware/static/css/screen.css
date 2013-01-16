@@ -372,6 +372,11 @@ div.dokuwiki select.edit {
   padding: 0.1em 0;
 }
 
+div.dokuwiki select {
+  color: black;
+}
+
+
 div.dokuwiki input.missing {
   font-size: 100%;
   border: 1px solid __border__;

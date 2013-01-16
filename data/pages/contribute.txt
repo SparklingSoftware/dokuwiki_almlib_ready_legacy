@@ -4,6 +4,8 @@ Thanks for considering to contribute! This library could not exist without the h
 
 The Process Improvement Infrastructure (PII) tries to make it as simple as possible to contribute. However, the key to standards is reaching agreements and in order to reach agreement (usually via consensus) some process is needed. The same process also helps prevent inefficiencies in making process improvements itself. Drinking out own champagne if you will.
 
+If you already understand how to contribute, but just quickly look something up, you can go straight to the [[:contribute:shortcuts|Shortcuts]] page.
+
 ==== Lean process ====
 
 The PII that the ALM Community uses follows a very lean process where pretty much every step is optional. It really depends on your organization to what rigor you want to implement the process. As everything, this library also allows you to customise the PII process as you see fit.
