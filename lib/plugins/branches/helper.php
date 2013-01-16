@@ -40,8 +40,15 @@ class helper_plugin_branches extends DokuWiki_Plugin {
 
         $this->git->cloneRepo($origin, $destination);    
         
-        copy(dirname(DOKU_INC).DIRECTORY_SEPARATOR.'Protected\conf\local.protected.php',
-             dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id.'\conf\local.protected.php');
+        $configfiles = array();
+        $configfiles[] = 'local.protected.php';
+        $configfiles[] = 'acl.auth.php';
+        $configfiles[] = 'users.auth.php';
+        foreach ($configfiles as $file)
+        {
+            copy(dirname(DOKU_INC).DIRECTORY_SEPARATOR.'Config\conf\\'.$file,
+                 dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id.'\conf\\'.$file);
+        }        
     }
 
     function getBranches()

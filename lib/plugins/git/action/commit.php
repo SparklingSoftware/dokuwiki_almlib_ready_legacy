@@ -11,6 +11,16 @@ require_once(DOKU_PLUGIN.'git/lib/Git.php');
 
 class action_plugin_git_commit extends DokuWiki_Action_Plugin {
     
+    var $helper = null;
+    
+    function action_plugin_git_commit(){  
+        $this->helper =& plugin_load('helper', 'git');
+        if (is_null($this->helper)) {
+            msg('The GIT plugin could not load its helper class', -1);
+            return false;
+        } 
+    }
+    
 	function register(&$controller) {
 		$controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, '_handle');
     }
@@ -23,7 +33,7 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
         switch (key($_REQUEST['cmd'])) {
             case 'commit' : 
                 $this->commit(); 
-                $this->makeReadOnly();
+                $helper->changeReadOnly(true);
                 break;
         }   
   	}       
@@ -40,32 +50,5 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
         {
             msg($e->getMessage());
         }
-    }
-    
-    function makeReadOnly()
-    {
-        global $config_cascade;
-        
-        $AUTH_ACL = file($config_cascade['acl']['default']);
-
-        $lines = array();
-        foreach($AUTH_ACL as $line){
-            if(strpos(strtolower($line), strtolower('@USER')) === FALSE)
-            {
-                $lines[] = $line;
-                continue;
-            }
-
-            // Whatever the setting is, reset it to 1 (Read)
-            $replaced = $line;
-            for ($i = 2; $i <= 255; $i++) {
-                $replaced = str_replace((string)$i, '1', $replaced);                
-            }
-            
-            $lines[] = $replaced;
-        }
-
-        // save it
-        io_saveFile($config_cascade['acl']['default'], join('',$lines));
     }
 }

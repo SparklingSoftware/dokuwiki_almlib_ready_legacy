@@ -38,4 +38,34 @@ class helper_plugin_git extends DokuWiki_Plugin {
             msg($e->getMessage());
         }
     }
+    
+    function changeReadOnly($readonly = true)
+    {
+        global $config_cascade;
+        
+        $AUTH_ACL = file($config_cascade['acl']['default']);
+
+        $lines = array();
+        foreach($AUTH_ACL as $line){
+            if(strpos(strtolower($line), strtolower('@USER')) === FALSE)
+            {
+                $lines[] = $line;
+                continue;
+            }
+
+            if ($readonly)
+            {
+                $lines[] = '*               @user         1';
+            }
+            else
+            {
+                $lines[] = '*               @user         16';
+            }
+            
+            $lines[] = $replaced;
+        }
+
+        // save it
+        io_saveFile($config_cascade['acl']['default'], join('',$lines));
+    }
 }
