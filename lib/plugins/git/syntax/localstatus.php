@@ -230,7 +230,6 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
         $isAdmin = $this->isCurrentUserAnAdmin();
         if ($isAdmin)
         {
-            $renderer->doc .= '<h2>TODO: Only show the bit below if you are an admin</h2>';        
             $renderer->doc .= '<form method="post">';
             $renderer->doc .= '   <input type="submit" name="cmd[revert commit]" value="Reject and revert Commit" />';
             $renderer->doc .= '   <input type="submit" name="cmd[push]" value="Push to live!" />';
