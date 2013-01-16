@@ -38,7 +38,10 @@ class helper_plugin_branches extends DokuWiki_Plugin {
         $destination = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id;     
         $origin = '"'.dirname(DOKU_INC).DIRECTORY_SEPARATOR.'Origin"';
 
-        $this->git->cloneRepo($origin, $destination);        
+        $this->git->cloneRepo($origin, $destination);    
+        
+        copy(dirname(DOKU_INC).DIRECTORY_SEPARATOR.'Protected\conf\local.protected.php',
+             dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id.'\conf\local.protected.php');
     }
 
     function getBranches()
