@@ -17,8 +17,8 @@ class action_plugin_git_alertcommited extends DokuWiki_Action_Plugin {
     
 	function _hook_header(&$event, $param) {
         global $conf;
-        // TODO: Read from plugin config
-        $gitStatusUrl = '/master/doku.php?id=wiki:git:localstatus';  // /master/doku.php?id=wiki:git:localstatus
+
+        $gitStatusUrl = DOKU_URL.'doku.php?id=wiki:git:localstatus';  // /master/doku.php?id=wiki:git:localstatus
         
         $repo = new GitRepo(DOKU_INC);
         $show = $repo->ChangesAwaitingApproval();

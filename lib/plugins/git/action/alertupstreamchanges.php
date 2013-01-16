@@ -18,7 +18,7 @@ class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
 	function _hook_header(&$event, $param) {
         global $conf;
 
-        $gitStatusUrl = '/master/doku.php?id=wiki:git:masterstatus';
+        $gitStatusUrl = DOKU_URL.'doku.php?id=wiki:git:masterstatus';
         
         if ($this->CheckForUpdates())
             msg('Updates available from master. <a href="'.$gitStatusUrl.'">click here to merge changes into this workspace.</a>');		
