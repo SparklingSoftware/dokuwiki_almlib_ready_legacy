@@ -93,7 +93,7 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
                     // There are changes waiting to be committed to the local repo
                     $this->renderCommitMessage($renderer);
                     $files = explode("\n", $waiting_to_commit);                   
-                    $this->renderChangesMade($renderer, $files, $repo);
+                    $this->renderChangesMade($renderer, $files, $repo, false);
                     return;
                 }
                 
@@ -112,7 +112,7 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
                     $renderer->doc .= '</textarea><br/>';        
 
                     // Show the approval sections
-                    $this->renderChangesMade($renderer, $files, $repo);
+                    $this->renderChangesMade($renderer, $files, $repo, true);
                     $this->renderAdminApproval($renderer);
                     return;
                 }                    
@@ -142,7 +142,7 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= '<br/><br/>';                
     }
     
-    function renderChangesMade(&$renderer, &$files, &$repo)
+    function renderChangesMade(&$renderer, &$files, &$repo, $approvalMode)
     {
         global $INFO;
         global $ID;
@@ -194,15 +194,24 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
 
         $fileForDiff = trim($_REQUEST['filename']);                
         if ($fileForDiff !== '')
-        {                    
+        {
             // Get left text (Current)
-            $left_filename = DOKU_INC.$fileForDiff;
-            $left_filename = str_replace("/", "\\", $left_filename);
+            $current_filename = DOKU_INC.$fileForDiff;
+            $current_filename = str_replace("/", "\\", $current_filename);
             $renderer->doc .= '<h2>Changes to: '.$fileForDiff.'</h2>';
-            $l_text = $this->getFileContents($left_filename);
+            $current_file_text = $this->getFileContents($current_filename);
             
             // Get right text (Latest in GIT)
-            $r_text = $repo->getFile($fileForDiff, 'HEAD');
+            $latest_git_text = $repo->getFile($fileForDiff, 'HEAD');
+            
+            if ($approvalMode) {
+                $l_text = $latest_git_text;
+                $r_text = $current_file_text;
+            }
+            else {
+                $l_text = $latest_git_text;
+                $r_text = $current_file_text;
+            }
             
             // Show diff
             $df = new Diff(explode("\n",htmlspecialchars($l_text)), explode("\n",htmlspecialchars($r_text)));

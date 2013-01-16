@@ -1,4 +1,4 @@
-**About NAVIGATE Lib**
+**About this library**
 [[:start|Introduction]] 
 [[:contribute|Contribute]]
 
@@ -22,6 +22,10 @@
 **General**
 [[:general:frequently asked questions|FAQ]]
 [[:general:glossary:glossary introduction|Glossary]]
+
+**Workflow**
+[[:wiki:git:localstatus|Local change status]]
+[[:wiki:git:originstatus|Origin change status]]
 
 **Admin**
 [[:wiki:orphans|Orphaned pages]]
