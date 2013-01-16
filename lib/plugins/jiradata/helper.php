@@ -68,12 +68,16 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
     function getData($jql) {
         global $conf;
         
-        Jira_Autoloader::register();
-
         $jiraURL = $this->getConf('jira_url');    
         $username = $this->getConf('jira_username');    
         $password = $this->getConf('jira_password');    
 
+        $headers = @get_headers($jiraURL."/rest/api/latest/serverInfo");
+        if(strpos($headers[0],'200')===false) {        
+            throw new Exception("Error connecting to JIRA: ".$jiraURL);
+        }
+        
+        Jira_Autoloader::register();
         $api = new Jira_Api(
             $jiraURL,
             new Jira_Api_Authentication_Basic($username, $password)

@@ -85,7 +85,15 @@ class syntax_plugin_branches_manage extends DokuWiki_Syntax_Plugin {
 
         if($format == 'xhtml'){
         
-            $improvements = $this->branch_helper->getInProgressInitiatives();
+            try
+            {
+                $improvements = $this->branch_helper->getInProgressInitiatives();
+            }                    
+            catch(Exception $e)
+            {
+                msg($e->getMessage());
+            }
+        
             $branches = $this->branch_helper->getBranches();
             
             $renderer->doc .= '<div class="table"><table>';

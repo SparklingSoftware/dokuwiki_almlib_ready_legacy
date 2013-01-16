@@ -30,14 +30,11 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
     
     function commit()
     {
-        $msg = $_REQUEST['CommitMessage'];
-
         try
         {
             $path = DOKU_INC;
             $repo = new GitRepo($path);
             $result = $repo->commit($msg);
-            msg($result);
         }
         catch(Exception $e)
         {
