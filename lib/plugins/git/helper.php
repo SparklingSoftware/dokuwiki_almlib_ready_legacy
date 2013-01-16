@@ -28,8 +28,7 @@ class helper_plugin_git extends DokuWiki_Plugin {
     function cloneRepo($destination) {
         global $conf;
         
-        //$origin = $conf['plugin']['git']['origin'];
-        $origin = '"E:\Stephan\ALM Community\Technical\WebSites\InstantALM-dev\origin"';
+        $origin = '"'.dirname(DOKU_INC).DIRECTORY_SEPARATOR.'Master"';
         
         try
         {

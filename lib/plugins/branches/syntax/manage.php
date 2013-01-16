@@ -84,7 +84,7 @@ class syntax_plugin_branches_manage extends DokuWiki_Syntax_Plugin {
         global $INFO, $conf;
 
         if($format == 'xhtml'){
-
+        
             $improvements = $this->branch_helper->getInProgressInitiatives();
             $branches = $this->branch_helper->getBranches();
             

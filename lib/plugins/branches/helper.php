@@ -35,43 +35,35 @@ class helper_plugin_branches extends DokuWiki_Plugin {
     
     function createBranch($branch_id)
     {
-        $destination = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id;        
+        $destination = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id;     
+        msg($destination);
         $this->git->cloneRepo($destination);        
     }
 
     function getBranches()
     {
+        global $conf;
+    
         $path = dirname(DOKU_INC); // Look at the root of this website, which is one above this instance
         $fulldirs = glob($path.'/*', GLOB_ONLYDIR);
         
         $dirs = array();
         foreach ($fulldirs as $dirname)
         {
+            $prefix = $this->getConf('branch_prefix');   // for instance: "IP-"
             $dir = basename($dirname);
-            if (stripos($dir, 'IP-') !== 0) continue;
+            if (stripos($dir, $prefix) !== 0) continue;
             array_push($dirs, $dir);
         }
         
         return $dirs;
     }
     
-    function getExistingBranches()
-    {
-        $branches = array();
-        
-        array_push(&$branches, "IP-165");
-        array_push(&$branches, "IP-501");
-        array_push(&$branches, "IP-502");
-        array_push(&$branches, "IP-503");
-        
-        return $branches;
-    }
-    
     function getInProgressInitiatives()
     {
         if ($this->jira === null) return;
-        
-        $improvements = $this->jira->getJiraData('project = SEPG AND (status = "In Progress" or status = "Awaiting Signoff") ORDER BY key');
+        $jql = 'project = ALM ORDER BY key';
+        $improvements = $this->jira->getData($jql);
         return $improvements;
     }
 

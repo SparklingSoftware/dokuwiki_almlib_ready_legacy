@@ -16,7 +16,7 @@ class action_plugin_rigrr_javascript extends DokuWiki_Action_Plugin {
 
     function rigrr_javascript()
     {
-        $rigrr = '/lib/plugins/rigrr/lib/rigrr.nocache.js';
+        $rigrr = DOKU_URL.'lib/plugins/rigrr/lib/rigrr.nocache.js';
         $script = '<script src="'.$rigrr.'" ></script>';
         
         return $script;
