@@ -107,7 +107,7 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
                     $files = explode("\n", $repo->get_files_by_commit($hash));                   
 
                     $renderer->doc .= '<h3>Commit message:</h3>';        
-                    $renderer->doc .= $message.'<textarea>';        
+                    $renderer->doc .= $message.'<textarea readonly>';        
                     $renderer->doc .= $commits[0]['message'];
                     $renderer->doc .= '</textarea><br/>';        
 
