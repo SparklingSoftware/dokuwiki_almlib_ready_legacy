@@ -34,21 +34,5 @@ class action_plugin_branches_createnewbranch extends DokuWiki_Action_Plugin {
             ptln('<script>url="/'.$branch_id.'";setTimeout("location.href=url",15);</script>');
         }
     }
-    
-    // copies files and non-empty directories
-    function rcopy($src, $dst) {
-        if (is_dir($src)) {
-            mkdir($dst);
-            $files = scandir($src);
-            foreach ($files as $file)
-            {
-                if ($file != "." && $file != "..")
-                {
-                    $this->rcopy($src.DIRECTORY_SEPARATOR.$file, $dst.DIRECTORY_SEPARATOR.$file);
-                }
-            }
-        }
-        else if (file_exists($src)) copy($src, $dst);
-    }
-    
+        
 }

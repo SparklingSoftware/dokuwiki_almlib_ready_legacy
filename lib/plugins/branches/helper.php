@@ -36,8 +36,9 @@ class helper_plugin_branches extends DokuWiki_Plugin {
     function createBranch($branch_id)
     {
         $destination = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id;     
-        msg($destination);
-        $this->git->cloneRepo($destination);        
+        $origin = '"'.dirname(DOKU_INC).DIRECTORY_SEPARATOR.'Origin"';
+
+        $this->git->cloneRepo($origin, $destination);        
     }
 
     function getBranches()

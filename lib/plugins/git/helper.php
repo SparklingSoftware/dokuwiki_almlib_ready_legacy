@@ -25,10 +25,8 @@ class helper_plugin_git extends DokuWiki_Plugin {
     }
 
     
-    function cloneRepo($destination) {
+    function cloneRepo($origin, $destination) {
         global $conf;
-        
-        $origin = '"'.dirname(DOKU_INC).DIRECTORY_SEPARATOR.'Master"';
         
         try
         {
