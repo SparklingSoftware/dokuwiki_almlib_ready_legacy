@@ -42,8 +42,6 @@ class helper_plugin_branches extends DokuWiki_Plugin {
         
         $configfiles = array();
         $configfiles[] = 'local.protected.php';
-        $configfiles[] = 'acl.auth.php';
-        $configfiles[] = 'users.auth.php';
         foreach ($configfiles as $file)
         {
             copy(dirname(DOKU_INC).DIRECTORY_SEPARATOR.'Config\conf\\'.$file,
