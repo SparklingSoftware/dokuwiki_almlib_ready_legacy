@@ -375,10 +375,12 @@ class GitRepo {
             $cmd = "commit -am \"".$message."\"";
             $fullcmd = "cd \"".$this->repo_path."\" && ".$this->git_path." ".$cmd;
 		    $this->run_command($fullcmd);
+            return true;
         }
         Catch (Exception $e)
         {
             msg($e->getMessage());
+            return false;
         }
 	}
     

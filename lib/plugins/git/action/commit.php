@@ -45,7 +45,7 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
             $path = DOKU_INC;
             $repo = new GitRepo($path);
             $result = $repo->commit($msg);
-            return true;
+            return $result;
         }
         catch(Exception $e)
         {
