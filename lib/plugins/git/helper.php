@@ -55,11 +55,11 @@ class helper_plugin_git extends DokuWiki_Plugin {
 
             if ($readonly)
             {
-                $lines[] = '*               @user         1';
+                $lines[] = '*               @user         '.AUTH_READ;
             }
             else
             {
-                $lines[] = '*               @user         16';
+                $lines[] = '*               @user         '.AUTH_DELETE;
             }
             
             $lines[] = $replaced;
