@@ -202,11 +202,11 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
         $fileForDiff = trim($_REQUEST['filename']);                
         if ($fileForDiff !== '')
         {
-            //// Get left text (Current)
-            //$current_filename = DOKU_INC.$fileForDiff;
-            //$current_filename = str_replace("/", "\\", $current_filename);
-            //$renderer->doc .= '<h2>Changes to: '.$fileForDiff.'</h2>';
-            //$current_file_text = $this->getFileContents($current_filename);
+            // Get left text (Current)
+            $current_filename = DOKU_INC.$fileForDiff;
+            $current_filename = str_replace("/", "\\", $current_filename);
+            $renderer->doc .= '<h2>Changes to: '.$fileForDiff.'</h2>';
+            $current_file_text = $this->getFileContents($current_filename);
             
             //// Get right text (Latest in GIT)
             //$latest_git_text = $repo->getFile($fileForDiff, 'HEAD');
@@ -221,7 +221,7 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
             //}
             
             $l_text = 'something';
-            $r_text = 'something else';
+            $r_text = $current_file_text;
             
             // Show diff
             $df = new Diff(explode("\n",htmlspecialchars($l_text)), explode("\n",htmlspecialchars($r_text)));
