@@ -29,25 +29,24 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
 
         if ($_REQUEST['cmd'] === null) return;
         
-        $text = trim($_POST['CommitMessage']);
-        msg($text);
+        $commit_message = trim($_POST['CommitMessage']);
         
         // verify valid values
         switch (key($_REQUEST['cmd'])) {
             case 'commit' : 
-                if ($this->commit() === false) return; 
+                if ($this->commit($commit_message) === false) return; 
                 $this->helper->changeReadOnly(true);
                 break;
         }   
   	}       
     
-    function commit()
+    function commit($commit_message)
     {
         try
         {
             $path = DOKU_INC;
             $repo = new GitRepo($path);
-            $result = $repo->commit($msg);
+            $result = $repo->commit($commit_message);
             return $result;
         }
         catch(Exception $e)
