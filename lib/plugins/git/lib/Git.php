@@ -368,11 +368,19 @@ class GitRepo {
 	 */
 	public function commit($message = "blank") {
         try {
+            $cmd = "gc";
+            $fullcmd = "cd \"".$this->repo_path."\" && ".$this->git_path." ".$cmd;
+            $this->run_command($fullcmd);
+
+            $cmd = "prune";
+            $fullcmd = "cd \"".$this->repo_path."\" && ".$this->git_path." ".$cmd;
+            $this->run_command($fullcmd);
+            
             $cmd = "add . -A";
             $fullcmd = "cd \"".$this->repo_path."\" && ".$this->git_path." ".$cmd;
             $this->run_command($fullcmd);
         
-            $cmd = "commit -am \"".$message."\"";
+            $cmd = "commit -a -m \"".$message."\"";
             $fullcmd = "cd \"".$this->repo_path."\" && ".$this->git_path." ".$cmd;
 		    $this->run_command($fullcmd);
             return true;
