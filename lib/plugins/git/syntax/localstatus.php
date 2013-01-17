@@ -84,6 +84,13 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
             
             try
             {
+                // If not logged in, go bugger off...
+                if (is_array($INFO['userinfo']) === false)
+                {
+                    $renderer->doc .= "<br/><br/>You need to be logged in to view this page. Please login.";
+                    return;
+                }
+            
                 // Get GIT commits
                 $repo = new GitRepo(DOKU_INC);
                 $waiting_to_commit = $repo->get_status();
@@ -148,7 +155,7 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
         global $ID;
         global $conf;
         
-        $renderer->doc .= "<h3>Changes made in this workspace::</h3>";
+        $renderer->doc .= "<h3>Changes made in this workspace:</h3>";
         $renderer->doc .= "<table><tr><th>What happened</th><th>Wiki page</th><th>Changes</th></tr>";
         foreach ($files as $file)
         {               

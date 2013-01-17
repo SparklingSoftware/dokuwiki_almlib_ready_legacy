@@ -32,7 +32,7 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
         // verify valid values
         switch (key($_REQUEST['cmd'])) {
             case 'commit' : 
-                $this->commit(); 
+                if ($this->commit() === false) return; 
                 $this->helper->changeReadOnly(true);
                 break;
         }   
@@ -45,10 +45,12 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
             $path = DOKU_INC;
             $repo = new GitRepo($path);
             $result = $repo->commit($msg);
+            return true;
         }
         catch(Exception $e)
         {
             msg($e->getMessage());
+            return false;
         }
     }
 }
