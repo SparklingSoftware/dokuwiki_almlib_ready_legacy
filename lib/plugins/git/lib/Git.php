@@ -276,7 +276,9 @@ class GitRepo {
 	public function getFile($filename, $branch = 'HEAD') {
         try
         {
-    		return $this->run('show '.$branch.':'.$filename);
+            $cmd = 'show '.$branch.':'.$filename;
+            msg($cmd);
+    		return $this->run($cmd);
         }
         catch (Exception $e)
         {
