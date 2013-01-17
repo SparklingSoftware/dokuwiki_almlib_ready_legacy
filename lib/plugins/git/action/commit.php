@@ -29,6 +29,9 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
 
         if ($_REQUEST['cmd'] === null) return;
         
+        $text = trim($_POST['textareaname']);
+        msg($text);
+        
         // verify valid values
         switch (key($_REQUEST['cmd'])) {
             case 'commit' : 
