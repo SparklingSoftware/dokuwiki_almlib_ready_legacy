@@ -8,5 +8,6 @@ data/media_attic/
 data/media_meta/
 data/tmp/
 
+conf/acl.auth.php
 conf/local.php.bak
 conf/local.protected.php
