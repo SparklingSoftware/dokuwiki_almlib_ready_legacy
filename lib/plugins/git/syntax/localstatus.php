@@ -203,7 +203,9 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
         if ($fileForDiff !== '')
         {
             // Get lieft text (Latest in GIT)
-            $latest_git_text = $repo->getFile($fileForDiff, 'HEAD');
+            msg("File for diff:".$fileForDiff.".");
+//            $latest_git_text = $repo->getFile($fileForDiff, 'HEAD');
+            $latest_git_text = "debugging";
 
             // Get right text (Current)
             $current_filename = DOKU_INC.$fileForDiff;
