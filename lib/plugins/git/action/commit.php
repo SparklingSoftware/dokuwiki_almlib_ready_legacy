@@ -33,7 +33,7 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
         switch (key($_REQUEST['cmd'])) {
             case 'commit' : 
                 $this->commit(); 
-                $helper->changeReadOnly(true);
+                $this->helper->changeReadOnly(true);
                 break;
         }   
   	}       

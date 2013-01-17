@@ -33,7 +33,7 @@ class action_plugin_git_push extends DokuWiki_Action_Plugin {
         switch (key($_REQUEST['cmd'])) {
             case 'push' : 
                 $this->push(); 
-                $helper->changeReadOnly(false);
+                $this->helper->changeReadOnly(false);
                 break;
        }   
   	}       
