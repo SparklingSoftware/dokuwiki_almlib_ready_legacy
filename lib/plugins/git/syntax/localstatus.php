@@ -226,8 +226,7 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
             $renderer->doc .= $tdf->format($df);
             $renderer->doc .= '</table>';
             $renderer->doc .= '</div>';
-        }
-        
+        }        
     }
 
     function renderAdminApproval(&$renderer)

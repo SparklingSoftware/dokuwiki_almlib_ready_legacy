@@ -277,7 +277,6 @@ class GitRepo {
         try
         {
             $cmd = 'show '.$branch.':'.$filename;
-            msg($cmd);
     		return $this->run($cmd);
         }
         catch (Exception $e)

@@ -161,11 +161,12 @@ class syntax_plugin_git_remotestatus extends DokuWiki_Syntax_Plugin {
                     // Get left text (Current)
                     $left_filename = DOKU_INC.$fileForDiff;
                     $left_filename = str_replace("/", "\\", $left_filename);
-                    $renderer->doc .= '<h2>Changes to: '.$fileForDiff.'</h2>';
+                    $renderer->doc .= '<h2>Changes to: '.$fileForDiff.'</h2><br/>';
+                    $renderer->doc .= 'Left = Current wiki content, Right = Upstream changes to be merged';
                     $l_text = $this->getFileContents($left_filename);
                     
                     // Get right text (Latest in GIT)
-                    $r_text = $repo->getFile($fileForDiff, 'HEAD');
+                    $r_text = $repo->getFile($fileForDiff, 'origin');
                     
                     // Show diff
                     $df = new Diff(explode("\n",htmlspecialchars($l_text)), explode("\n",htmlspecialchars($r_text)));
