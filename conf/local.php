@@ -10,7 +10,6 @@ $conf['title'] = 'Standards Library';
 $conf['template'] = 'SparklingSoftware';
 $conf['tagline'] = 'The WikiPedia of IT Processes';
 $conf['license'] = 'cc-by-sa';
-$conf['savedir'] = 'E:\\Stephan\\ALM Community\\Technical\\WebSites\\InstantALM\\Live-Data';
 $conf['useacl'] = 1;
 $conf['superuser'] = '@admin';
 $conf['sitemap'] = 1;

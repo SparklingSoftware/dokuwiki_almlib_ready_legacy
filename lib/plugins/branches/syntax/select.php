@@ -78,9 +78,6 @@ class syntax_plugin_branches_select extends DokuWiki_Syntax_Plugin {
         global $INFO, $conf;
 
         if($format == 'xhtml'){
-            
-            $pos = strpos(wl($ID), "master");
-            if ($pos === false) msg('You are looking at a draft!! Click <a href="/master/doku.php"/>here</a> to go to the Master', -1);
 
             $renderer->doc .= "<select id='Improvement' onchange='ChangeBranche();'>";
             $renderer->doc .= "<option>Select a different branch</option>";
