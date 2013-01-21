@@ -23,7 +23,7 @@ class action_plugin_branches_draftwarning extends DokuWiki_Action_Plugin {
         $this->getConf();
         $live_virtual_dir = $conf['plugin']['branches']['live_virtual_dir'];
         
-        $pos = strpos(strtolower(wl($ID)), $live_virtual_dir);        
+        $pos = strpos(strtolower(wl($ID)), strtolower($live_virtual_dir));        
         if ($pos === false) msg('You are looking at a draft!! Click <a href="/'.$live_virtual_dir.'/doku.php"/>here</a> to go to '.$live_virtual_dir.' content', -1);
     }
 }
