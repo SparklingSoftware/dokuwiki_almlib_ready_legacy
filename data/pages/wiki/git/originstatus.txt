@@ -1,6 +1,0 @@
-~~NOCACHE~~
-
-===== Remote Status =====
-
-~~GITRemoteStatus~~
-
