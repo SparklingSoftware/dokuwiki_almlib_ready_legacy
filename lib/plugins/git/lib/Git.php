@@ -99,6 +99,9 @@ class GitRepo {
     //    $repo->git_path = $git_exe_path;
     //    .... do more work here ....
     // }
+    //
+    // Make sure you enclose the path with double quotes for windows paths like this:
+    // $conf['plugin']['git']['git_exe_path'] = '"C:\Program Files (x86)\Git\bin\git.exe"';
 
 	/**
 	 * Create a new git repository
