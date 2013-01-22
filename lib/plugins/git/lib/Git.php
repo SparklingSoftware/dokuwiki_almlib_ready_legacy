@@ -88,9 +88,9 @@ class GitRepo {
     }
         
 
-//	public $git_path = '/usr/bin/git';
+	public $git_path = 'sudo /usr/bin/git';
     // TODO: Read path from plugin config
-	public $git_path = "\"C:\\Program Files (x86)\\Git\\bin\\git.exe\"";
+//	public $git_path = "\"C:\\Program Files (x86)\\Git\\bin\\git.exe\"";
 
 	/**
 	 * Create a new git repository
@@ -420,8 +420,10 @@ class GitRepo {
 	public function clone_from($source) {
         try {
             $cmd = "clone --local $source \"".$this->repo_path."\"";
-            $fullcmd = "cd \"".$this->repo_path."\" && ".$this->git_path." ".$cmd;
-		    $this->run_command($fullcmd);
+//            $fullcmd = "cd \"".$this->repo_path."\" && ".$this->git_path." ".$cmd;
+            $fullcmd = "/usr/bin/git ".$cmd;
+//            msg('Full command: '.$fullcmd);
+	    $this->run_command($fullcmd);
         }
         Catch (Exception $e)
         {

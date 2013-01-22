@@ -37,6 +37,7 @@ class helper_plugin_branches extends DokuWiki_Plugin {
     {
         global $conf;
         $this->getConf();
+        $debug = false;
 
         // Get config
         $origin_wiki = $conf['plugin']['branches']['origin_wiki_dir'];
@@ -45,11 +46,13 @@ class helper_plugin_branches extends DokuWiki_Plugin {
         // Clone wiki
         $origin = '"'.dirname(DOKU_INC).DIRECTORY_SEPARATOR.$origin_wiki.'"';
         $destination = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id;     
+        if ($debug) msg('Cloning from: '.$origin.' To: '.$destination);        
         $this->git->cloneRepo($origin, $destination);    
-        
+      
         // Clone data
         $origin = '"'.dirname(DOKU_INC).DIRECTORY_SEPARATOR.$origin_data.'"';
-        $destination = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id.'-Data';     
+        $destination = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id.'-Data';        
+        if ($debug) msg('Cloning from: '.$origin.' To: '.$destination);  
         $this->git->cloneRepo($origin, $destination);    
 
         // Apply config
@@ -57,10 +60,13 @@ class helper_plugin_branches extends DokuWiki_Plugin {
         $configfiles = array();
         $configfiles[] = 'local.protected.php';
         $configfiles[] = 'acl.auth.php';
+        if ($debug) msg('Config dir: '.$configDir);  
         foreach ($configfiles as $file)
         {
-            copy(dirname(DOKU_INC).DIRECTORY_SEPARATOR.$configDir.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.$file,
-                 dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.$file);
+            $source = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$configDir.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.$file;
+            $dest = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.$file;
+            if ($debug) msg('Copying configs from: '.$source.' To: '.$dest);  
+            copy($source, $dest);
         }        
     }
 
