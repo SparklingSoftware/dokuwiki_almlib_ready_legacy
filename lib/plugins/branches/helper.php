@@ -37,7 +37,7 @@ class helper_plugin_branches extends DokuWiki_Plugin {
     {
         global $conf;
         $this->getConf();
-        $debug = false;
+        $debug = true;
 
         // Get config
         $origin_wiki = $conf['plugin']['branches']['origin_wiki_dir'];
@@ -47,13 +47,13 @@ class helper_plugin_branches extends DokuWiki_Plugin {
         $origin = '"'.dirname(DOKU_INC).DIRECTORY_SEPARATOR.$origin_wiki.'"';
         $destination = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id;     
         if ($debug) msg('Cloning from: '.$origin.' To: '.$destination);        
-        $this->git->cloneRepo($origin, $destination);    
+//        $this->git->cloneRepo($origin, $destination);    
       
         // Clone data
         $origin = '"'.dirname(DOKU_INC).DIRECTORY_SEPARATOR.$origin_data.'"';
         $destination = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id.'-Data';        
         if ($debug) msg('Cloning from: '.$origin.' To: '.$destination);  
-        $this->git->cloneRepo($origin, $destination);    
+//        $this->git->cloneRepo($origin, $destination);    
 
         // Apply config
         $configDir = $conf['plugin']['branches']['config_dir'];        
@@ -67,7 +67,24 @@ class helper_plugin_branches extends DokuWiki_Plugin {
             $dest = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.$file;
             if ($debug) msg('Copying configs from: '.$source.' To: '.$dest);  
             copy($source, $dest);
+
+            if ($file === 'local.protected.php' ) {
+              if ($debug) msg('replace dest: '.$dest.' branch_id: '.$branch_id);
+              $this->replaceConfigSetting($dest, '<<WORKSPACE>>', $branch_id);
+            }
         }        
+    }
+
+    function replaceConfigSetting($filename, $oldValue, $newValue)
+    {
+       //read the entire string
+       $str=implode("\n",file($filename));
+
+       $fp=fopen($filename,'w');
+       $str=str_replace($oldValue, $newValue, $str);
+
+       // rewrite the file
+       fwrite($fp,$str,strlen($str));
     }
 
     function getBranches()

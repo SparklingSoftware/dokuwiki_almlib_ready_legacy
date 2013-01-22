@@ -31,7 +31,7 @@ class action_plugin_branches_createnewbranch extends DokuWiki_Action_Plugin {
             $this->branch_helper->createBranch($branch_id);
             msg('Created branch: '.$branch_id);
             
-            ptln('<script>url="/'.$branch_id.'";setTimeout("location.href=url",15);</script>');
+//            ptln('<script>url="/'.$branch_id.'";setTimeout("location.href=url",15);</script>');
         }
     }
         
