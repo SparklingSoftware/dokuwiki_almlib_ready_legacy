@@ -53,6 +53,7 @@ class helper_plugin_branches extends DokuWiki_Plugin {
     function getBranches()
     {
         global $conf;
+        $this->getConf();
     
         $path = dirname(DOKU_INC); // Look at the root of this website, which is one above this instance
         $fulldirs = glob($path.'/*', GLOB_ONLYDIR);
@@ -60,9 +61,11 @@ class helper_plugin_branches extends DokuWiki_Plugin {
         $dirs = array();
         foreach ($fulldirs as $dirname)
         {
-            $prefix = $this->getConf('branch_prefix');   // for instance: "IP-"
+            $prefix = $conf['plugin']['branches']['branch_prefix'];   // for instance: "IP-"
             $dir = basename($dirname);
             if (stripos($dir, $prefix) !== 0) continue;
+            if (stripos($dir, '-data') !== false) continue;
+
             array_push($dirs, $dir);
         }
         
@@ -71,8 +74,11 @@ class helper_plugin_branches extends DokuWiki_Plugin {
     
     function getInProgressInitiatives()
     {
+        global $conf;
+        $this->getConf();
+
         if ($this->jira === null) return;
-        $jql = 'project = ALM ORDER BY key';
+        $jql = $conf['plugin']['branches']['jql'];
         $improvements = $this->jira->getData($jql);
         return $improvements;
     }

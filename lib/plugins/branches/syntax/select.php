@@ -75,20 +75,20 @@ class syntax_plugin_branches_select extends DokuWiki_Syntax_Plugin {
      * Create output
      */
     function render($format, &$renderer, $data) {
-        global $INFO, $conf;
-
+        global $conf;
+        
         if($format == 'xhtml'){
 
+            $this->getConf();
+            $live_virtual_dir = $conf['plugin']['branches']['live_virtual_dir'];
+        
             $renderer->doc .= "<select id='Improvement' onchange='ChangeBranche();'>";
-            $renderer->doc .= "<option>Select a different branch</option>";
-            $renderer->doc .= "<option>master</option>";
+            $renderer->doc .= "<option>Select a different workspace</option>";
+            $renderer->doc .= "<option>".$live_virtual_dir."</option>";
             $branches = $this->branch_helper->getBranches();
             foreach ($branches as $branche)
             {
-                if (strpos(strtolower($branche), '-data') === false)
-                {
-                    $renderer->doc .= "<option>".$branche."</option>";
-                }            
+                $renderer->doc .= "<option>".$branche."</option>";
             }
             $renderer->doc .= "<option>Create new</option>";
             $renderer->doc .= "</select></br>";

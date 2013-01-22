@@ -93,6 +93,7 @@ class syntax_plugin_branches_manage extends DokuWiki_Syntax_Plugin {
             {
                 msg($e->getMessage());
             }
+            
         
             $branches = $this->branch_helper->getBranches();
             
