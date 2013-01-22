@@ -85,7 +85,10 @@ class syntax_plugin_branches_select extends DokuWiki_Syntax_Plugin {
             $branches = $this->branch_helper->getBranches();
             foreach ($branches as $branche)
             {
-                $renderer->doc .= "<option>".$branche."</option>";
+                if (strpos(strtolower($branche), '-data') === false)
+                {
+                    $renderer->doc .= "<option>".$branche."</option>";
+                }            
             }
             $renderer->doc .= "<option>Create new</option>";
             $renderer->doc .= "</select></br>";
