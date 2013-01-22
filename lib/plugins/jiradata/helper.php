@@ -72,11 +72,9 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
         $integrationEnabled = $conf['plugin']['jiradata']['jira_integration_enabled'];
         if ($integrationEnabled === 0) {
             $table = array();
-            $row = array(
-                "key" => 'ALM-999', 
-                "title" => 'JIRA Integration disabled', 
-                "description" => 'JIRA Integration disabled'
-            );
+            $row = array( "key" => 'ALM-9999',  "title" => 'JIRA Integration disabled', "description" => 'JIRA Integration disabled');
+            $row = array( "key" => 'ALM-9998',  "title" => 'JIRA Integration disabled', "description" => 'JIRA Integration disabled');
+            $row = array( "key" => 'ALM-9997',  "title" => 'JIRA Integration disabled', "description" => 'JIRA Integration disabled');
             array_push(&$table, $row);                                
             return $table;
         }
