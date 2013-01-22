@@ -87,10 +87,18 @@ class GitRepo {
         return $this->repo_path;
     }
         
-
-	public $git_path = 'sudo /usr/bin/git';
-    // TODO: Read path from plugin config
-//	public $git_path = "\"C:\\Program Files (x86)\\Git\\bin\\git.exe\"";
+    public $git_path = '/usr/bin/git';
+    // The git path defaults to the default location for linux, the consumer of this class needs to override with setting from config:
+    //
+    // function doSomeGitWork() {
+    //    global $conf;
+    //    $this->getConf();
+    //    $git_exe_path = $conf['plugin']['git']['git_exe_path'];
+    //
+    //    $repo = new GitRepo(.....);
+    //    $repo->git_path = $git_exe_path;
+    //    .... do more work here ....
+    // }
 
 	/**
 	 * Create a new git repository
@@ -418,12 +426,13 @@ class GitRepo {
 	 * @return  string
 	 */
 	public function clone_from($source) {
-        try {
+
+    try 
+        {
             $cmd = "clone --local $source \"".$this->repo_path."\"";
-//            $fullcmd = "cd \"".$this->repo_path."\" && ".$this->git_path." ".$cmd;
-            $fullcmd = "/usr/bin/git ".$cmd;
-//            msg('Full command: '.$fullcmd);
-	    $this->run_command($fullcmd);
+            $fullcmd = "cd \"".$this->repo_path."\" && ".$this->git_path." ".$cmd;
+            msg('Full command: '.$fullcmd);
+            $this->run_command($fullcmd);
         }
         Catch (Exception $e)
         {

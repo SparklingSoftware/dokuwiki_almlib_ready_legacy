@@ -69,6 +69,18 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
         global $conf;
         $this->getConf();
         
+        $integrationEnabled = $conf['plugin']['jiradata']['jira_integration_enabled'];
+        if ($integrationEnabled === 0) {
+            $table = array();
+            $row = array(
+                "key" => 'ALM-999', 
+                "title" => 'JIRA Integration disabled', 
+                "description" => 'JIRA Integration disabled'
+            );
+            array_push(&$table, $row);                                
+            return $table;
+        }
+        
         $jiraURL = $conf['plugin']['jiradata']['jira_url'];    
         $username = $conf['plugin']['jiradata']['jira_username'];    
         $password = $conf['plugin']['jiradata']['jira_password'];    

@@ -27,10 +27,13 @@ class helper_plugin_git extends DokuWiki_Plugin {
     
     function cloneRepo($origin, $destination) {
         global $conf;
+        $this->getConf();
+        $git_exe_path = $conf['plugin']['git']['git_exe_path'];
         
         try
         {
             $repo = new GitRepo($destination, true, false);
+            $repo->git_path = $git_exe_path;
             $repo->clone_from($origin);
         }
         catch (Exception $e)
