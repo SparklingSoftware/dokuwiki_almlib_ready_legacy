@@ -44,8 +44,14 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
     {
         try
         {
-            $path = DOKU_INC;
-            $repo = new GitRepo($path);
+            global $conf;
+            $this->getConf();
+
+            $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
+            $datapath = $conf['savedir'];    
+            
+            $repo = new GitRepo($datapath);
+            $repo->git_path = $git_exe_path;        
             $result = $repo->commit($commit_message);
             return $result;
         }

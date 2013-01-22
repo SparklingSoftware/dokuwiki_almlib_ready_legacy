@@ -25,12 +25,18 @@ class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
 	}
 
     function CheckForUpdates() {
+        global $conf;
+        $this->getConf();
         $hasCacheTimedOut = false;
-                
+
+        $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
+        $datapath = $conf['savedir'];    
+
         $updatesAvailable = false;
         if ($hasCacheTimedOut)
         {
-            $repo = new GitRepo(DOKU_INC);
+            $repo = new GitRepo($datapath);
+            $repo->git_path = $git_exe_path;        
             $repo->fetch();
             $log = $repo->get_log();
                         

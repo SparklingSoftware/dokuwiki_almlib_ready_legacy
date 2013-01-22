@@ -92,7 +92,11 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
                 }
             
                 // Get GIT commits
-                $repo = new GitRepo(DOKU_INC);
+                $this->getConf();
+                $git_exe_path = $conf['plugin']['git']['git_exe_path'];
+                $datapath = $conf['savedir'];    
+                $repo = new GitRepo($datapath);
+                $repo->git_path = $git_exe_path;                
                 $waiting_to_commit = $repo->get_status();
 
                 if ($waiting_to_commit !== "") 

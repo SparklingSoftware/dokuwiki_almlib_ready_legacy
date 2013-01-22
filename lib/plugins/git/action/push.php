@@ -40,8 +40,22 @@ class action_plugin_git_push extends DokuWiki_Action_Plugin {
     
     function push()
     {
-        $repo = new GitRepo(DOKU_INC);
-        $result = $repo->push();        
+        try {
+            global $conf;
+            $this->getConf();
+
+            $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
+            $datapath = $conf['savedir'];    
+            
+            $repo = new GitRepo($datapath);
+            $repo->git_path = $git_exe_path;   
+            $result = $repo->push();        
+        }
+        catch(Exception $e)
+        {
+            msg($e->getMessage());
+            return false;
+        }
     }
     
 

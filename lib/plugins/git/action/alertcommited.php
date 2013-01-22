@@ -16,34 +16,20 @@ class action_plugin_git_alertcommited extends DokuWiki_Action_Plugin {
  	}
     
 	function _hook_header(&$event, $param) {
-        global $conf;
+        global $conf, $INFO;
+        $this->getConf();
+
+        $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
+        $gitStatusUrl = DOKU_URL.'doku.php?id='.$conf['plugin']['git']['git_exe_path'];
+        $datapath = $conf['savedir'];    
         
-        $gitStatusUrl = DOKU_URL.'doku.php?id=wiki:git:localstatus';  // /master/doku.php?id=wiki:git:localstatus
-        
-        $repo = new GitRepo(DOKU_INC);
+        $repo = new GitRepo($datapath);
+        $repo->git_path = $git_exe_path;        
         $show = $repo->ChangesAwaitingApproval();
 
-        if ($show) {
-            $isAdmin = $this->isCurrentUserAnAdmin();
-            if ($isAdmin)
-            {
-                msg('Changes waiting to be approved. <a href="'.$gitStatusUrl.'">click here to view changes.</a>');		
-            }
+        if ($show && $INFO['isadmin']) {
+           msg('Changes waiting to be approved. <a href="'.$gitStatusUrl.'">click here to view changes.</a>');		
         }
-	}
-    
-    function isCurrentUserAnAdmin()
-    {
-        global $INFO;
-        $grps=array();
-        if (is_array($INFO['userinfo'])) {
-            foreach($INFO['userinfo']['grps'] as $val) {
-                $grps[]="@" . $val;
-            }
-        }
-
-        
-        return in_array("@admin", $grps);
-    }
-            
+	}    
+           
 }

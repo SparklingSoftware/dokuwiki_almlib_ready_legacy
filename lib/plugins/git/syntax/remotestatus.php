@@ -84,7 +84,14 @@ class syntax_plugin_git_remotestatus extends DokuWiki_Syntax_Plugin {
             try
             {
                 // Get GIT commits
-                $repo = new GitRepo(DOKU_INC);
+                global $conf;
+                $this->getConf();
+
+                $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
+                $datapath = $conf['savedir'];    
+                
+                $repo = new GitRepo($datapath);
+                $repo->git_path = $git_exe_path;  
                 $repo->fetch();
                 $log = $repo->get_log();
                 if ($log === "")
