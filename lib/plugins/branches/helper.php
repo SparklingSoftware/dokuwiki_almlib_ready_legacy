@@ -35,18 +35,32 @@ class helper_plugin_branches extends DokuWiki_Plugin {
     
     function createBranch($branch_id)
     {
-        $destination = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id;     
-        $origin = '"'.dirname(DOKU_INC).DIRECTORY_SEPARATOR.'Origin"';
+        global $conf;
+        $this->getConf();
 
+        // Get config
+        $origin_wiki = $conf['plugin']['branches']['origin_wiki_dir'];
+        $origin_data = $conf['plugin']['branches']['origin_data_dir'];
+
+        // Clone wiki
+        $origin = '"'.dirname(DOKU_INC).DIRECTORY_SEPARATOR.$origin_wiki.'"';
+        $destination = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id;     
         $this->git->cloneRepo($origin, $destination);    
         
+        // Clone data
+        $origin = '"'.dirname(DOKU_INC).DIRECTORY_SEPARATOR.$origin_data.'"';
+        $destination = dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id.'-Data';     
+        $this->git->cloneRepo($origin, $destination);    
+
+        // Apply config
+        $configDir = $conf['plugin']['branches']['config_dir'];        
         $configfiles = array();
         $configfiles[] = 'local.protected.php';
         $configfiles[] = 'acl.auth.php';
         foreach ($configfiles as $file)
         {
-            copy(dirname(DOKU_INC).DIRECTORY_SEPARATOR.'Config\conf\\'.$file,
-                 dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id.'\conf\\'.$file);
+            copy(dirname(DOKU_INC).DIRECTORY_SEPARATOR.$configDir.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.$file,
+                 dirname(DOKU_INC).DIRECTORY_SEPARATOR.$branch_id.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.$file);
         }        
     }
 
