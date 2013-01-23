@@ -17,7 +17,7 @@ class action_plugin_git_alertcommited extends DokuWiki_Action_Plugin {
     
 	function _hook_header(&$event, $param) {
         global $conf, $INFO;
-        $this->getConf();
+        $this->getConf('');
 
         $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
         $gitStatusUrl = DOKU_URL.'doku.php?id='.$conf['plugin']['git']['git_exe_path'];

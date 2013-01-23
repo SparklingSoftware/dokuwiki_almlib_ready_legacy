@@ -79,7 +79,7 @@ class syntax_plugin_branches_select extends DokuWiki_Syntax_Plugin {
         
         if($format == 'xhtml'){
 
-            $this->getConf();
+            $this->getConf('');
             $live_virtual_dir = $conf['plugin']['branches']['live_virtual_dir'];
         
             $renderer->doc .= "<select id='Improvement' onchange='ChangeBranche();'>";

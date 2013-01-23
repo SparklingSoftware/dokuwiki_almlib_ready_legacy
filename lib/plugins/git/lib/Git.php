@@ -92,7 +92,7 @@ class GitRepo {
     
     function doSomeGitWork() {
        global $conf;
-       $this->getConf();
+       $this->getConf('');
        $git_exe_path = $conf['plugin']['git']['git_exe_path'];
     
        $repo = new GitRepo(.....);

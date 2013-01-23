@@ -36,7 +36,7 @@ class helper_plugin_branches extends DokuWiki_Plugin {
     function createBranch($branch_id)
     {
         global $conf;
-        $this->getConf();
+        $this->getConf('');
         $debug = false;
 
         // Get config
@@ -90,7 +90,7 @@ class helper_plugin_branches extends DokuWiki_Plugin {
     function getBranches()
     {
         global $conf;
-        $this->getConf();
+        $this->getConf('');
     
         $path = dirname(DOKU_INC); // Look at the root of this website, which is one above this instance
         $fulldirs = glob($path.'/*', GLOB_ONLYDIR);
@@ -112,7 +112,7 @@ class helper_plugin_branches extends DokuWiki_Plugin {
     function getInProgressInitiatives()
     {
         global $conf;
-        $this->getConf();
+        $this->getConf('');
 
         if ($this->jira === null) return;
         $jql = $conf['plugin']['branches']['jql'];

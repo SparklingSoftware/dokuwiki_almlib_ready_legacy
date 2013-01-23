@@ -26,7 +26,7 @@ class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
 
     function CheckForUpdates() {
         global $conf;
-        $this->getConf();
+        $this->getConf('');
         $hasCacheTimedOut = false;
 
         $git_exe_path = $conf['plugin']['git']['git_exe_path'];        

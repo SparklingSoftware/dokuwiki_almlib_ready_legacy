@@ -27,7 +27,7 @@ class helper_plugin_git extends DokuWiki_Plugin {
     
     function cloneRepo($origin, $destination) {
         global $conf;
-        $this->getConf();
+        $this->getConf('');
         $git_exe_path = $conf['plugin']['git']['git_exe_path'];
         
         try

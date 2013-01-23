@@ -42,7 +42,7 @@ class action_plugin_git_push extends DokuWiki_Action_Plugin {
     {
         try {
             global $conf;
-            $this->getConf();
+            $this->getConf('');
 
             $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
             $datapath = $conf['savedir'];    

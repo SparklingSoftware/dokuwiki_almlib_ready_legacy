@@ -92,7 +92,7 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
                 }
             
                 // Get GIT commits
-                $this->getConf();
+                $this->getConf('');
                 $git_exe_path = $conf['plugin']['git']['git_exe_path'];
                 $datapath = $conf['savedir'];    
                 $repo = new GitRepo($datapath);
@@ -156,7 +156,7 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
     function renderChangesMade(&$renderer, &$files, &$repo, $approvalMode)
     {
         global $conf;
-        $this->getConf();
+        $this->getConf('');
         
         $renderer->doc .= "<h3>Changes made in this workspace:</h3>";
         $renderer->doc .= "<table><tr><th>What happened</th><th>Wiki page</th><th>Changes</th></tr>";

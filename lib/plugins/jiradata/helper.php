@@ -38,13 +38,13 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
             "title" => "Improve the IT Industry", 
             "description" => "As an IT industry we owe it to ourselfs to deliver more value to our customers"
             );
-        array_push(&$table, $row);        
+        array_push($table, $row);        
         $row = array(
             "key" => "IP-165", 
             "title" => "Improvement 165", 
             "description" => "Improvement 165 description"
             );
-        array_push(&$table, $row);        
+        array_push($table, $row);        
         
         for ($i=501; $i<=550; $i++)
         {
@@ -54,7 +54,7 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
                 "description" => "Improvement ".$i." description"
                 );
 
-            array_push(&$table, $row);
+            array_push($table, $row);
         }
         
         return $table;
@@ -67,17 +67,17 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
     
     function getData($jql) {
         global $conf;
-        $this->getConf();
+        $this->getConf('');
         
         $integrationEnabled = $conf['plugin']['jiradata']['jira_integration_enabled'];
         if ($integrationEnabled === 0) {
             $table = array();
             $row = array( "key" => 'ALM-9999',  "title" => 'JIRA Integration disabled', "description" => 'JIRA Integration disabled');
-            array_push(&$table, $row);                                
+            array_push($table, $row);                                
             $row = array( "key" => 'ALM-9998',  "title" => 'JIRA Integration disabled', "description" => 'JIRA Integration disabled');
-            array_push(&$table, $row);                                
+            array_push($table, $row);                                
             $row = array( "key" => 'ALM-9997',  "title" => 'JIRA Integration disabled', "description" => 'JIRA Integration disabled');
-            array_push(&$table, $row);                                
+            array_push($table, $row);                                
             return $table;
         }
         
@@ -116,7 +116,7 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
                 "description" => $description
             );
 
-            array_push(&$table, $row);                    
+            array_push($table, $row);                    
         }        
 
         return $table;

@@ -85,7 +85,7 @@ class syntax_plugin_git_remotestatus extends DokuWiki_Syntax_Plugin {
             {
                 // Get GIT commits
                 global $conf;
-                $this->getConf();
+                $this->getConf('');
 
                 $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
                 $datapath = $conf['savedir'];    

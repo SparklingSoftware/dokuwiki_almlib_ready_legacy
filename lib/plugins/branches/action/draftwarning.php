@@ -20,7 +20,7 @@ class action_plugin_branches_draftwarning extends DokuWiki_Action_Plugin {
     function handle(&$event, $param){
         global $conf;
         
-        $this->getConf();
+        $this->getConf('');
         $live_virtual_dir = $conf['plugin']['branches']['live_virtual_dir'];
         
         $pos = strpos(strtolower(wl($ID)), strtolower($live_virtual_dir));        
