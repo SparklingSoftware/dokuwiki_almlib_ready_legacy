@@ -433,9 +433,9 @@ class GitRepo {
 
     try 
         {
-            $cmd = "clone -q --local $source \"".$this->repo_path."\"";
+            $cmd = "clone -q $source \"".$this->repo_path."\"";
             $fullcmd = "cd \"".$this->repo_path."\" && ".$this->git_path." ".$cmd;
-//            msg('Full command: '.$fullcmd);
+            // msg('Full command: '.$fullcmd);
             $this->run_command($fullcmd);
         }
         Catch (Exception $e)
