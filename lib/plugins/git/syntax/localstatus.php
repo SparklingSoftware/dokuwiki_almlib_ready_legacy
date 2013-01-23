@@ -155,20 +155,14 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
     
     function renderChangesMade(&$renderer, &$files, &$repo, $approvalMode)
     {
-        global $INFO;
-        global $ID;
         global $conf;
+        $this->getConf();
         
         $renderer->doc .= "<h3>Changes made in this workspace:</h3>";
         $renderer->doc .= "<table><tr><th>What happened</th><th>Wiki page</th><th>Changes</th></tr>";
         foreach ($files as $file)
         {               
             if ($file === "") continue;
-
-            //            $skipNonWikiPages = $conf['plugin']['git']['HideNonWikiPages'];
-            //$skipNonWikiPages = true;
-            //if (($skipNonWikiPages === true) && (strpos($file, 'data/pages') === false))
-            //    continue;
 
             $renderer->doc .= "<tr><td>";
             
@@ -187,17 +181,15 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
             $renderer->doc .= "</td><td>";
             $file = trim(substr($file, 2));
             $page = $this->getPageFromFile($file);            
-            $renderer->doc .=  '<a href="http://localhost:8002/doku.php?id='.$page.'">'.$page.'</a>';
+            $renderer->doc .=  '<a href="'.DOKU_URL.'doku.php?id='.$page.'">'.$page.'</a>';
             $renderer->doc .= "</td><td>";
-            // Is this a wiki page
-            if (strpos($file, 'data/page') !== false)
-            {                
-                // only show diff buttens for wiki pages...
-                $renderer->doc .= '   <form method="post">';
-                $renderer->doc .= '      <input type="hidden" name="filename"  value="'.$file.'" />';
-                $renderer->doc .= '      <input type="submit" value="View Changes" />';
-                $renderer->doc .= '   </form>';
-            }
+
+            // The "View Changes" button
+            $renderer->doc .= '   <form method="post">';
+            $renderer->doc .= '      <input type="hidden" name="filename"  value="'.$file.'" />';
+            $renderer->doc .= '      <input type="submit" value="View Changes" />';
+            $renderer->doc .= '   </form>';
+
             $renderer->doc .= "</td>";
             $renderer->doc .= "<tr>";
         }
@@ -209,15 +201,15 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
             // Get left text
             if ($approvalMode) {
                 // Second last in GIT
-               $l_text = $repo->getFile($fileForDiff, 'HEAD~1');
+               $l_text = $repo->getFile("pages/".$fileForDiff, 'HEAD~1');
             }
             else {
                // Latest in GIT
-               $l_text = $repo->getFile($fileForDiff, 'HEAD');
+                $l_text = $repo->getFile("pages/".$fileForDiff, 'HEAD');
             }
 
             // Get right text (Current)
-            $current_filename = DOKU_INC.$fileForDiff;
+            $current_filename = $conf['savedir'].'/'.$fileForDiff;
             $current_filename = str_replace("/", "\\", $current_filename);
             $renderer->doc .= '<h2>Changes to: '.$fileForDiff.'</h2>';
             $r_text = $this->getFileContents($current_filename);
@@ -248,10 +240,10 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
     function getPageFromFile($file)
     {
         // If it's not a wiki page, just return the normal filename
-        if (strpos($file, 'data/pages') === false) return $file;
+        if (strpos($file, 'pages/') === false) return $file;
 
         // Replace all sorts of stuff so it makes sense to non-technical users.
-        $page = str_replace('data/pages/', ':', $file);
+        $page = str_replace('pages/', '', $file);
         $page = str_replace('.txt', '', $page);
         $page = str_replace('/', ':', $page);
         $page = trim($page);

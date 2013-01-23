@@ -131,7 +131,10 @@ margin-bottom:-26px;
 html>body div.dokuwiki textarea.edit {
   background: white /*url(static/3rd/dokuwiki/inputshadow.png) repeat-x top*/;
   color: black;
-}/*
+}
+
+    
+/*
  table.inline {
   font-size: 100%;
   color: white;
