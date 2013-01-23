@@ -21,7 +21,8 @@ class action_plugin_git_merge extends DokuWiki_Action_Plugin {
         
         // verify valid values
         switch (key($_REQUEST['cmd'])) {
-            case 'merge' : $this->merge(); break;
+//            case 'merge' : $this->merge(); break;
+            case 'merge' : $this->pull(); break;
             case 'ignore' : $this->ignore(); break;
         }   
   	}       
@@ -46,6 +47,27 @@ class action_plugin_git_merge extends DokuWiki_Action_Plugin {
           return false;
        }
     }
+
+    function pull()
+    {
+        try {
+            global $conf;
+            $this->getConf();
+
+            $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
+            $datapath = $conf['savedir'];    
+            
+            $repo = new GitRepo($datapath);
+            $repo->git_path = $git_exe_path;   
+            $repo->pull('', '');
+        }
+        catch(Exception $e)
+        {
+            msg($e->getMessage());
+            return false;
+        }
+    }
+
 
     function ignore()
     {
