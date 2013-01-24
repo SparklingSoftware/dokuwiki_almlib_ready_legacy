@@ -16,13 +16,14 @@ class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
  	}
     
 	function handler(&$event, $param) {
-        global $conf;
+        global $conf, $ID;
         $this->getConf('');
 
-        $gitStatusUrl = DOKU_URL.'doku.php?id='.$conf['plugin']['git']['remote_status_page'];
+        $gitRemoteStatusUrl = DOKU_URL.'doku.php?id='.$conf['plugin']['git']['origin_status_page'];
+        if ($gitRemoteStatusUrl === wl($ID,'',true)) return;
         
         if ($this->CheckForUpdates())
-            msg('Other improvements have been approved. <a href="'.$gitStatusUrl.'">click here to merge changes into this workspace.</a>');		
+            msg('Other improvements have been approved. <a href="'.$gitRemoteStatusUrl.'">click here to merge changes into this workspace.</a>');		
 	}
 
     function CheckForUpdates() {

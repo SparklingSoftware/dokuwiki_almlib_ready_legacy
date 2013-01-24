@@ -12,23 +12,25 @@ require_once(DOKU_PLUGIN.'git/lib/Git.php');
 class action_plugin_git_alertcommited extends DokuWiki_Action_Plugin {
         
 	function register(&$controller) {
-		$controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, '_hook_header');
+		$controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, 'handler');
  	}
     
-	function _hook_header(&$event, $param) {
+	function handler(&$event, $param) {
         global $conf, $INFO;
         $this->getConf('');
 
         $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
-        $gitStatusUrl = DOKU_URL.'doku.php?id='.$conf['plugin']['git']['local_status_page'];
+        $gitLocalStatusUrl = DOKU_URL.'doku.php?id='.$conf['plugin']['git']['local_status_page'];
         $datapath = $conf['savedir'];    
+        
+        if ($gitLocalStatusUrl === wl($ID,'',true)) return;
         
         $repo = new GitRepo($datapath);
         $repo->git_path = $git_exe_path;        
         $show = $repo->ChangesAwaitingApproval();
 
         if ($show && $INFO['isadmin']) {
-           msg('Changes waiting to be approved. <a href="'.$gitStatusUrl.'">click here to view changes.</a>');		
+            msg('Changes waiting to be approved. <a href="'.$gitLocalStatusUrl.'">click here to view changes.</a>');		
         }
 	}    
            

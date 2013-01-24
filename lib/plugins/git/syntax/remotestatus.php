@@ -128,8 +128,9 @@ class syntax_plugin_git_remotestatus extends DokuWiki_Syntax_Plugin {
                     $renderer->doc .= "<table><tr><th>What happened</th><th>File</th><th>link</th></tr>";
                     foreach ($files as $file)
                     {                
-                        $renderer->doc .= "<tr><td>";
                         if ($file === "") continue;
+
+                        $renderer->doc .= "<tr><td>";
                         
                         $change = substr($file, 0, 1);
                         switch($change)
@@ -154,7 +155,7 @@ class syntax_plugin_git_remotestatus extends DokuWiki_Syntax_Plugin {
                         $renderer->doc .= '      <input type="submit" value="View Changes" />';
                         $renderer->doc .= '   </form>';
                         $renderer->doc .= "</td>";
-                        $renderer->doc .= "<tr>";
+                        $renderer->doc .= "</tr>";
                     }
                     $renderer->doc .= "</table>";
                     $renderer->doc .= "</div>\n";
@@ -166,7 +167,7 @@ class syntax_plugin_git_remotestatus extends DokuWiki_Syntax_Plugin {
                 if ($fileForDiff !== '' && $hashForDiff !== '')
                 {                    
                     // Get left text (Current)
-                    $left_filename = DOKU_INC.$fileForDiff;
+                    $left_filename = $conf['savedir'].'/'.$fileForDiff;
                     $left_filename = str_replace("/", "\\", $left_filename);
                     $renderer->doc .= '<h2>Changes to: '.$fileForDiff.'</h2><br/>';
                     $renderer->doc .= 'Left = Current wiki content, Right = Upstream changes to be merged';
