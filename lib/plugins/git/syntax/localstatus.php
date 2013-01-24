@@ -201,11 +201,11 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
             // Get left text
             if ($approvalMode) {
                 // Second last in GIT
-               $l_text = $repo->getFile("pages/".$fileForDiff, 'HEAD~1');
+               $l_text = $repo->getFile($fileForDiff, 'HEAD~1');
             }
             else {
                // Latest in GIT
-                $l_text = $repo->getFile("pages/".$fileForDiff, 'HEAD');
+                $l_text = $repo->getFile($fileForDiff, 'HEAD');
             }
 
             // Get right text (Current)

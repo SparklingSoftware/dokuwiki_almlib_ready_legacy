@@ -286,14 +286,17 @@ class GitRepo {
      * @return  string
      */
 	public function getFile($filename, $branch = 'HEAD') {
+
+        $cmd = 'show '.$branch.':'.$filename;
         try
         {
-            $cmd = 'show '.$branch.':'.$filename;
     		return $this->run($cmd);
         }
         catch (Exception $e)
         {
-            return "Page not found in master";
+            // msg('Exception during command: '.$cmd);
+            // Not really an exception, if a new page has been added the exception is part of normal operation :-(
+            return "Page not found";
         }
 	}
     
