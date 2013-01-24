@@ -12,13 +12,13 @@ require_once(DOKU_PLUGIN.'git/lib/Git.php');
 class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
         
 	function register(&$controller) {
-		$controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, '_hook_header');
+		$controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, 'handler');
  	}
     
-	function _hook_header(&$event, $param) {
+	function handler(&$event, $param) {
         global $conf;
 
-        $gitStatusUrl = DOKU_URL.'doku.php?id=wiki:git:masterstatus';
+        $gitStatusUrl = DOKU_URL.'doku.php?id='.$conf['plugin']['git']['remote_status_page'];
         
         if ($this->CheckForUpdates())
             msg('Updates available from master. <a href="'.$gitStatusUrl.'">click here to merge changes into this workspace.</a>');		
@@ -27,13 +27,12 @@ class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
     function CheckForUpdates() {
         global $conf;
         $this->getConf('');
-        $hasCacheTimedOut = false;
 
         $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
         $datapath = $conf['savedir'];    
 
         $updatesAvailable = false;
-        if ($hasCacheTimedOut)
+        if ($this->hasCacheTimedOut())
         {
             $repo = new GitRepo($datapath);
             $repo->git_path = $git_exe_path;        
@@ -41,10 +40,18 @@ class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
             $log = $repo->get_log();
                         
             if ($log === "") $updatesAvailable = true;
-            return $updatesAvailable;
         }
-        
-        $updatesAvailable = $this->readUpdateStatusFromCache();
+        else
+        {
+            $updatesAvailable = $this->readUpdateStatusFromCache();
+        }
+        return $updatesAvailable;
+    }
+    
+    function hasCacheTimedOut()
+    {
+       $hasCacheTimedOut = true;
+       return $hasCacheTimedOut;
     }
     
     function readUpdateStatusFromCache() {

@@ -5,4 +5,5 @@ $conf['git_exe_path'] = '/usr/bin/git';
 // $conf['plugin']['git']['git_exe_path'] = '"C:\Program Files (x86)\Git\bin\git.exe"';
 
 $conf['local_status_page'] = 'wiki:git:localstatus';
+$conf['remote_status_page'] = 'wiki:git:masterstatus';
 
