@@ -17,11 +17,12 @@ class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
     
 	function handler(&$event, $param) {
         global $conf;
+        $this->getConf('');
 
         $gitStatusUrl = DOKU_URL.'doku.php?id='.$conf['plugin']['git']['remote_status_page'];
         
         if ($this->CheckForUpdates())
-            msg('Updates available from master. <a href="'.$gitStatusUrl.'">click here to merge changes into this workspace.</a>');		
+            msg('Other improvements have been approved. <a href="'.$gitStatusUrl.'">click here to merge changes into this workspace.</a>');		
 	}
 
     function CheckForUpdates() {
@@ -39,7 +40,7 @@ class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
             $repo->fetch();
             $log = $repo->get_log();
                         
-            if ($log === "") $updatesAvailable = true;
+            if ($log !== "") $updatesAvailable = true;
         }
         else
         {
