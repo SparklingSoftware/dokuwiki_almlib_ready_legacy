@@ -20,7 +20,7 @@ class action_plugin_git_alertcommited extends DokuWiki_Action_Plugin {
         $this->getConf('');
 
         $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
-        $gitStatusUrl = DOKU_URL.'doku.php?id='.$conf['plugin']['git']['git_exe_path'];
+        $gitStatusUrl = DOKU_URL.'doku.php?id='.$conf['plugin']['git']['local_status_page'];
         $datapath = $conf['savedir'];    
         
         $repo = new GitRepo($datapath);
