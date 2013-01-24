@@ -47,11 +47,12 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
         $this->getConf('');
         
         $notify = $conf['plugin']['git']['commit_notifcations']; 
+        $local_status_page = wl($conf['plugin']['git']['local_status_page'],'',true);
         
         $mail = new Mailer();
         $mail->to($notify);
         $mail->subject('An improvement has been submitted for approval!');
-        $mail->setBody('Please review the proposed changes before the next meeting: '.wl($ID,'',true));
+        $mail->setBody('Please review the proposed changes before the next meeting: '.$local_status_page);
         
         return $mail->send();
     }

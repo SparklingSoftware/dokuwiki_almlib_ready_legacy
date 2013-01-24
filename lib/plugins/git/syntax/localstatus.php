@@ -231,7 +231,7 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
         if ($isAdmin)
         {
             $renderer->doc .= '<form method="post">';
-            $renderer->doc .= '   <input type="submit" name="cmd[revert commit]" value="Reject and revert Commit" />';
+            $renderer->doc .= '   <input type="submit" name="cmd[revert]" value="Reject and revert Commit" />';
             $renderer->doc .= '   <input type="submit" name="cmd[push]" value="Push to live!" />';
             $renderer->doc .= '</form>';
         }

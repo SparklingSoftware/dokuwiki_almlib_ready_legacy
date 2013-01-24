@@ -6,4 +6,6 @@ $conf['git_exe_path'] = '/usr/bin/git';
 
 $conf['local_status_page'] = 'wiki:git:localstatus';
 $conf['origin_status_page'] = 'wiki:git:originstatus';
+$conf['commit_notifcations'] = 'stephan@stephanenarina.nl';
+
 

@@ -564,6 +564,19 @@ class GitRepo {
         return $this->run("merge $branch --no-ff");
     }
 
+    /**
+     * Runs a `git reset` call
+     *
+     * Reverts the last commit, leaving the local files intact
+     *
+     * @access  public
+     * @return  string
+     */
+    public function revertLastCommit()
+    {
+        return $this->run("reset --soft HEAD~1");
+    }
+
 
     /**
      * Runs a git fetch on the current branch

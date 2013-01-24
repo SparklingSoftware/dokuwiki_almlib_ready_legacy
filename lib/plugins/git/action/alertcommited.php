@@ -20,7 +20,7 @@ class action_plugin_git_alertcommited extends DokuWiki_Action_Plugin {
         $this->getConf('');
 
         $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
-        $gitLocalStatusUrl = DOKU_URL.'doku.php?id='.$conf['plugin']['git']['local_status_page'];
+        $gitLocalStatusUrl = wl($conf['plugin']['git']['local_status_page'],'',true);
         $datapath = $conf['savedir'];    
         
         if ($gitLocalStatusUrl === wl($ID,'',true)) return;
@@ -29,7 +29,7 @@ class action_plugin_git_alertcommited extends DokuWiki_Action_Plugin {
         $repo->git_path = $git_exe_path;        
         $show = $repo->ChangesAwaitingApproval();
 
-        if ($show && $INFO['isadmin']) {
+        if ($show) {
             msg('Changes waiting to be approved. <a href="'.$gitLocalStatusUrl.'">click here to view changes.</a>');		
         }
 	}    
