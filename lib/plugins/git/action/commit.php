@@ -36,9 +36,25 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
             case 'commit' : 
                 if ($this->commit($commit_message) === false) return; 
                 $this->helper->changeReadOnly(true);
+                $this->sendNotificationEMail();
                 break;
         }   
   	}       
+      
+    function sendNotificationEMail()
+    {
+        global $conf;
+        $this->getConf('');
+        
+        $notify = $conf['plugin']['git']['commit_notifcations']; 
+        
+        $mail = new Mailer();
+        $mail->to($notify);
+        $mail->subject('An improvement has been submitted for approval!');
+        $mail->setBody('Please review the proposed changes before the next meeting: '.wl($ID,'',true));
+        
+        return $mail->send();
+    }
     
     function commit($commit_message)
     {
