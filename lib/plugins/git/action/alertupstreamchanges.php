@@ -20,8 +20,9 @@ class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
         $this->getConf('');
 
         $gitRemoteStatusUrl = DOKU_URL.'doku.php?id='.$conf['plugin']['git']['origin_status_page'];
-        if ($gitRemoteStatusUrl === wl($ID,'',true)) return;
-        
+        if ($gitRemoteStatusUrl === wl($ID,'',true)) return;  // Skip remote GIT status page, no notification needed when the user is looking at the details.
+        if (strpos(strtolower($gitLocalStatusUrl), strtolower('mediamanager.php')) === FALSE) return;  // Skip media manager page as well
+
         if ($this->CheckForUpdates())
             msg('Other improvements have been approved. <a href="'.$gitRemoteStatusUrl.'">click here to merge changes into this workspace.</a>');		
 	}
