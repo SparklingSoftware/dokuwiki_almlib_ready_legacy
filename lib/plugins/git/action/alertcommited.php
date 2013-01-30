@@ -24,7 +24,7 @@ class action_plugin_git_alertcommited extends DokuWiki_Action_Plugin {
         $datapath = $conf['savedir'];    
         
         if ($gitLocalStatusUrl === wl($ID,'',true)) return;  // Skip local GIT status page, no notification needed when the user is looking at the details.
-        if (strpos(strtolower($gitLocalStatusUrl), strtolower('mediamanager.php')) === FALSE) return;  // Skip media manager page as well
+        if (strpos(strtolower($gitLocalStatusUrl), strtolower('mediamanager.php')) !== false) return;  // Skip media manager page as well
         
         $repo = new GitRepo($datapath);
         $repo->git_path = $git_exe_path;        

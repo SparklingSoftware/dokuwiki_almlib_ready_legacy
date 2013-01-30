@@ -41,7 +41,7 @@ class syntax_plugin_rigrr extends DokuWiki_Syntax_Plugin {
             list($match,$state,$pos) = $data;
             if ($state != DOKU_LEXER_UNMATCHED) return false; 
 
-            $renderer->doc .= '<textarea id="rigrr_bpmn" style="visibility:hidden;">';
+            $renderer->doc .= '<textarea id="rigrr_bpmn" style="display:none;">';
             $renderer->doc .= trim($match);
             $renderer->doc .= '</textarea>';
             $renderer->doc .= '<div id="rigrr_canvas"></div>';
