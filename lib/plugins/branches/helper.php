@@ -72,6 +72,7 @@ class helper_plugin_branches extends DokuWiki_Plugin {
             if ($file === 'local.protected.php' ) {
               if ($debug) msg('replace dest: '.$dest.' branch_id: '.$branch_id);
               $this->replaceConfigSetting($dest, '<<WORKSPACE>>', $branch_id);
+              $this->replaceConfigSetting($dest, '<<WEBSITE_BASE_URL>>', "/".$branch_id);
             }
         }        
     }
