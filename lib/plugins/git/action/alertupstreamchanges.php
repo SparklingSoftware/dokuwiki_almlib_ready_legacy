@@ -15,14 +15,21 @@ class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
 		$controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, 'handler');
  	}
     
+    function current_url(){
+        $url = (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+        return $url;
+    }
+    
 	function handler(&$event, $param) {
         global $conf, $ID;
         $this->getConf('');
 
         $gitRemoteStatusUrl = DOKU_URL.'doku.php?id='.$conf['plugin']['git']['origin_status_page'];
+        
+        $currentURL = $this->current_url();
         if ($gitRemoteStatusUrl === wl($ID,'',true)) return;  // Skip remote GIT status page, no notification needed when the user is looking at the details.
-        if (strpos(strtolower($gitRemoteStatusUrl), strtolower('mediamanager.php')) !== false) return;  // Skip media manager page as well
-
+        if (strpos(strtolower($currentURL), strtolower('mediamanager.php')) > 0) return;  // Skip media manager page as well
+        
         if ($this->CheckForUpdates())
             msg('Other improvements have been approved. <a href="'.$gitRemoteStatusUrl.'">click here to merge changes into this workspace.</a>');		
 	}
