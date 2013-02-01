@@ -590,6 +590,26 @@ class GitRepo {
     }
 
     /**
+     * Tests whether origin points to a valid repo
+     *
+     * @access  public
+     * @return  string
+     */
+    public function test_origin()
+    {
+        try
+        {
+           $this->run("fetch --dry-run");
+           return true;
+        }
+        catch (Exception $e)
+        {
+           return false;
+        }
+    }
+
+
+    /**
      * Add a new tag on the current position
      *
      * Accepts the name for the tag and the message

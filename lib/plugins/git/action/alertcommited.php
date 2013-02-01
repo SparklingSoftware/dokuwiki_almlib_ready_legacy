@@ -20,7 +20,7 @@ class action_plugin_git_alertcommited extends DokuWiki_Action_Plugin {
         return $url;
     }
      
-	function handler(&$event, $param) {
+    function handler(&$event, $param) {
         global $conf, $INFO;
         $this->getConf('');
 
@@ -33,7 +33,11 @@ class action_plugin_git_alertcommited extends DokuWiki_Action_Plugin {
         if (strpos(strtolower($currentURL), strtolower('mediamanager.php')) > 0) return;  // Skip media manager page as well
         
         $repo = new GitRepo($datapath);
-        $repo->git_path = $git_exe_path;        
+        $repo->git_path = $git_exe_path; 
+        if ($repo->test_origin() === false) {
+           msg('Repository seems to have an invalid remote (origin)');
+           return;
+        }
         $show = $repo->ChangesAwaitingApproval();
 
         if ($show) {
