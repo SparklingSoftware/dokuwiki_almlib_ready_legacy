@@ -16,6 +16,7 @@ require_once(DOKU_INC.'inc/search.php');
 define('DEBUG', 0);
  
 function revision_callback_search_wanted(&$data,$base,$file,$type,$lvl,$opts) {
+    global $conf;
 
 	if($type == 'd'){
 		return true; // recurse all directories, but we don't store namespaces
@@ -39,7 +40,7 @@ function revision_callback_search_wanted(&$data,$base,$file,$type,$lvl,$opts) {
 	$item = &$data["$id"];
 	if(! isset($item)) {
 	   // Create a new entry
-	   $filename = DOKU_INC.'data/pages/'.$file;
+       $filename = $conf['datadir'].$file;
        $last_modifed = filemtime($filename);
     
        $revision_date = $last_modifed + (intval($revision_frequency) * 86400);
@@ -60,8 +61,9 @@ function revision_string($revision) {
 }
 
 function get_revision_frequency($file) {
+    global $conf;
 
-  $filename = DOKU_INC.'data/pages/'.$file;
+  $filename = $conf['datadir'].$file;
   $body = @file_get_contents($filename);
 
   $pattern = '/<revision_frequency>\-?\d+<\/revision_frequency>/i';
@@ -69,16 +71,15 @@ function get_revision_frequency($file) {
   $result = htmlspecialchars($matches[0]);    
   $result = str_replace(htmlspecialchars('<revision_frequency>'), "", $result);
   $result = str_replace(htmlspecialchars('</revision_frequency>'), "", $result);
-  
-
+    
   return $result;
 }
 
 function date_compare($a, $b) {
-  if ($a['revision'] == $b['revision']) {
-    return 0;
-  }
-  return ($a['revision'] < $b['revision']) ? -1 : 1;
+    if ($a['revision_date'] == $b['revision_date']) {
+       return 0;
+    }
+    return ($a['revision_date'] < $b['revision_date']) ? -1 : 1;
 }
 
 
