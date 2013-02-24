@@ -71,7 +71,7 @@ function get_revision_frequency($file) {
   $result = htmlspecialchars($matches[0]);    
   $result = str_replace(htmlspecialchars('<revision_frequency>'), "", $result);
   $result = str_replace(htmlspecialchars('</revision_frequency>'), "", $result);
-    
+
   return $result;
 }
 
@@ -210,7 +210,7 @@ class syntax_plugin_revisionsdue extends DokuWiki_Syntax_Plugin {
          continue ;
         }
         
-        if ($mandatory_revisions === false and $item['frequency'] === '' ) {
+        if ($mandatory_revisions === false and ($item['frequency'] === '' or !isset($item['frequency']))) {
               continue ;
         }
           
