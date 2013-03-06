@@ -85,6 +85,9 @@ class syntax_plugin_branches_select extends DokuWiki_Syntax_Plugin {
             $renderer->doc .= "<select id='Improvement' onchange='ChangeBranche();'>";
             $renderer->doc .= "<option>Select a different workspace</option>";
             $renderer->doc .= "<option>".$live_virtual_dir."</option>";
+            $renderer->doc .= "<option>MinorUpdates</option>";
+            $renderer->doc .= "<option>Upstream</option>";
+            $renderer->doc .= "<option>Dev</option>";
             $branches = $this->branch_helper->getBranches();
             foreach ($branches as $branche)
             {
