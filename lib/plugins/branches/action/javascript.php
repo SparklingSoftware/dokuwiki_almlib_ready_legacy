@@ -20,14 +20,15 @@ class action_plugin_branches_javascript extends DokuWiki_Action_Plugin {
 
         function ChangeBranche()
         {    
-           var selectedValue = document.getElementById("Improvement").value;
+           var select = document.getElementById("Improvement");
+           var selectedValue = select.options[select.selectedIndex].text;
            if (selectedValue == "Create new")
            {
               self.location="'.DOKU_URL.'doku.php?id=wiki:workspaces";
            }
            else 
            {   
-             self.location="/" + selectedValue + "/doku.php";
+              self.location="/" + selectedValue + "/doku.php";
            };
         }
 

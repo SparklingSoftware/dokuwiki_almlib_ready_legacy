@@ -45,7 +45,13 @@ class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
         if ($this->hasCacheTimedOut())
         {
             $repo = new GitRepo($datapath);
-            $repo->git_path = $git_exe_path;        
+            $repo->git_path = $git_exe_path;      
+
+            if ($repo->test_origin() === false) {
+               msg('Repository seems to have an invalid remote (origin)');
+               return $updatesAvailable;
+            }
+  
             $repo->fetch();
             $log = $repo->get_log();
                         
