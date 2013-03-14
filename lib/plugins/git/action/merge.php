@@ -11,6 +11,13 @@ require_once(DOKU_PLUGIN.'git/lib/Git.php');
 
 class action_plugin_git_merge extends DokuWiki_Action_Plugin {
     
+    var $helper = null;
+
+    function action_plugin_git_merge (){
+        $this->helper =& plugin_load('helper', 'git');
+        if(!$this->helper) msg('Loading the git helper failed.',-1);
+    }
+
 	function register(&$controller) {
 		$controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, '_handle');
     }
@@ -40,6 +47,7 @@ class action_plugin_git_merge extends DokuWiki_Action_Plugin {
             $repo = new GitRepo($datapath);
             $repo->git_path = $git_exe_path;   
             $repo->merge($hash);
+
        }
        catch(Exception $e)
        {
@@ -57,9 +65,15 @@ class action_plugin_git_merge extends DokuWiki_Action_Plugin {
             $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
             $datapath = $conf['savedir'];    
             
-            $repo = new GitRepo($datapath);
-            $repo->git_path = $git_exe_path;   
-            $repo->pull('', '');
+//            $repo = new GitRepo($datapath);
+//            $repo->git_path = $git_exe_path;   
+//            $repo->pull('', '');
+            
+            if(!$this->helper) {
+                msg('helper is null');
+                return;
+            }
+            $this->helper->rebuild_data_plugin_data();
         }
         catch(Exception $e)
         {
