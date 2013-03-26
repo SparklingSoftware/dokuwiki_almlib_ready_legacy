@@ -65,12 +65,12 @@ class action_plugin_git_merge extends DokuWiki_Action_Plugin {
             $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
             $datapath = $conf['savedir'];    
             
-//            $repo = new GitRepo($datapath);
-//            $repo->git_path = $git_exe_path;   
-//            $repo->pull('', '');
+            $repo = new GitRepo($datapath);
+            $repo->git_path = $git_exe_path;   
+            $repo->pull('', '');
             
             if(!$this->helper) {
-                msg('helper is null');
+                msg('GIT helper is null in the merge.php file');
                 return;
             }
             $this->helper->rebuild_data_plugin_data();
