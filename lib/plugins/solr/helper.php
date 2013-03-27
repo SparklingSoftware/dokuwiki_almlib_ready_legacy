@@ -71,17 +71,20 @@ class helper_plugin_solr extends DokuWiki_Plugin {
     global $lang;
     global $ACT;
     global $QUERY;
+    
+    $form = "";
 
-    print '<form action="'.wl().'" accept-charset="utf-8" class="search" id="dw__search" method="get"><div class="no">';
-    print '<input type="hidden" name="do" value="solr_search" />';
-    print '<input type="text" ';
-    if($ACT == 'solr_search' || ($ACT == 'solr_adv_search' && !empty($QUERY))) print 'value="'.htmlspecialchars($QUERY).'" ';
-    if(!$autocomplete) print 'autocomplete="off" ';
-    print 'id="solr_qsearch__in" accesskey="f" name="id" class="edit" title="[F]" />';
-    print '<input type="submit" value="'.$lang['btn_search'].'" class="button" title="'.$lang['btn_search'].'" />';
-    if($ajax) print '<div id="solr_qsearch__out" class="ajax_qsearch JSpopup"></div>';
-    print '</div></form>';
-    return true;  
+    $form = $form.'<form action="'.wl().'" accept-charset="utf-8" class="search" id="dw__search" method="get"><div class="no">';
+    $form = $form.'<input type="hidden" name="do" value="solr_search" />';
+    $form = $form.'<input type="text" ';
+    if($ACT == 'solr_search' || ($ACT == 'solr_adv_search' && !empty($QUERY))) $form = $form.'value="'.htmlspecialchars($QUERY).'" ';
+    if(!$autocomplete) $form = $form.'autocomplete="off" ';
+    $form = $form.'id="solr_qsearch__in" accesskey="f" name="id" class="edit" title="[F]" />';
+    $form = $form.'<input type="submit" value="'.$lang['btn_search'].'" class="button" title="'.$lang['btn_search'].'" />';
+    if($ajax) $form = $form.'<div id="solr_qsearch__out" class="ajax_qsearch JSpopup"></div>';
+    $form = $form.'</div></form>';
+
+    return $form;  
   }
   
   /**
