@@ -67,6 +67,13 @@ class action_plugin_solr extends DokuWiki_Action_Plugin {
    * Register the handlers with the dokuwiki's event controller
    */
   function register(&$controller) {
+    if ($this->getConf('solr_enabled') === 0)
+    {
+       //msg('solr disabled');
+       return;    
+    }
+    // msg('solr enabled');
+  
     $controller->register_hook('INDEXER_TASKS_RUN', 'BEFORE',  $this, 'updateindex');
     $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE',  $this, 'allowsearchpage');
     $controller->register_hook('TPL_ACT_UNKNOWN', 'BEFORE',  $this, 'dispatch_search');

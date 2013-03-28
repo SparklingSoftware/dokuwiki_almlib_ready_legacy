@@ -5,3 +5,5 @@ $conf['num_snippets'] = 20;
 
 // Path to Solr server
 $conf['url'] = 'http://localhost:8983/solr';
+
+$conf['solr_enabled'] = 0;

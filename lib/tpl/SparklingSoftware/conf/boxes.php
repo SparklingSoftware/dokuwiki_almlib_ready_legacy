@@ -123,20 +123,22 @@ if (empty($conf["useacl"]) || //are there any users?
         //headline
         $_monobook_boxes["p-search"]["headline"] = $lang["monobook_bar_search"];
 
-        //content
-
-        //    $_monobook_boxes["p-search"]["xhtml"] =  "<form action=\"".wl()."\" accept-charset=\"utf-8\" id=\"dw__search\" name=\"dw__search\">\n"
-    //                                            ."  <input type=\"hidden\" name=\"do\" value=\"search\" />\n"
-    //                                            ."  <input id=\"qsearch__in\" name=\"id\" type=\"text\" accesskey=\"f\" value=\"\" />\n"
-    //                                            ."  <input type=\"button\" class=\"searchButton\" id=\"searchGoButton\" value=\"".hsc($lang["monobook_btn_go"])."\" onclick=\"document.location.href='".DOKU_BASE.DOKU_SCRIPT."?id='+document.getElementById('qsearch__in').value;\" />&#160;\n"
-    //                                            ."  <input type=\"submit\" name=\"fulltext\" class=\"searchButton\" value=\"".hsc($lang["monobook_btn_search"])."\" />\n"
-    //                                            ."</form>";
-    //
-    
-//        $_monobook_boxes["p-search"]["xhtml"] = "<div>search box</div>";
-        $solr =& plugin_load("helper", "solr");
-        $_monobook_boxes["p-search"]["xhtml"] = $solr->tpl_searchform(true, false); // Search field with ajax and no autocomplete
-        
+        $use_solr = tpl_getConf("monobook_solr_enabled");
+        if ($use_solr === 1)
+        {
+            $solr =& plugin_load("helper", "solr");
+            $content = $solr->tpl_searchform(true, false); // Search field with ajax and no autocomplete
+            $_monobook_boxes["p-search"]["xhtml"] = $content;
+        }
+        else
+        {
+            $_monobook_boxes["p-search"]["xhtml"] =  "<form action=\"".wl()."\" accept-charset=\"utf-8\" id=\"dw__search\" name=\"dw__search\">\n"
+                                                ."  <input type=\"hidden\" name=\"do\" value=\"search\" />\n"
+                                                ."  <input id=\"qsearch__in\" name=\"id\" type=\"text\" accesskey=\"f\" value=\"\" />\n"
+                                                ."  <input type=\"button\" class=\"searchButton\" id=\"searchGoButton\" value=\"".hsc($lang["monobook_btn_go"])."\" onclick=\"document.location.href='".DOKU_BASE.DOKU_SCRIPT."?id='+document.getElementById('qsearch__in').value;\" />&#160;\n"
+                                                ."  <input type=\"submit\" name=\"fulltext\" class=\"searchButton\" value=\"".hsc($lang["monobook_btn_search"])."\" />\n"
+                                                ."</form>";        
+        }
     }
 
     //toolbox
