@@ -46,7 +46,7 @@ class action_plugin_git_merge extends DokuWiki_Action_Plugin {
             
             $repo = new GitRepo($datapath);
             $repo->git_path = $git_exe_path;   
-            $repo->merge($hash);
+            $repo->merge($hash, "Merge");
 
        }
        catch(Exception $e)
@@ -67,6 +67,8 @@ class action_plugin_git_merge extends DokuWiki_Action_Plugin {
             
             $repo = new GitRepo($datapath);
             $repo->git_path = $git_exe_path;   
+//            $repo->fetch();
+//            $repo->merge($hash, "Merge");            
             $repo->pull('', '');
             
             if(!$this->helper) {

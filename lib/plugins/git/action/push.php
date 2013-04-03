@@ -34,9 +34,19 @@ class action_plugin_git_push extends DokuWiki_Action_Plugin {
             case 'push' : 
                 $this->push(); 
                 $this->helper->changeReadOnly(false);
+                $this->redirect();
                 break;
        }   
   	}       
+
+    function redirect()
+    {
+            global $conf;
+            $this->getConf('');
+            $local_status_page = $conf['plugin']['git']['local_status_page'];        
+
+           header( 'Location:doku.php?id='.$local_status_page );
+    }
     
     function push()
     {
