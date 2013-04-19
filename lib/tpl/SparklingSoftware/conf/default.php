@@ -83,3 +83,4 @@ if (!empty($_SERVER["HTTP_HOST"])){
 $conf["monobook_loaduserjs"]            = false; //TRUE: monobook/user/user.js will be loaded
 $conf["monobook_closedwiki"]            = false; //TRUE: hides most tabs/functions until user is logged in
 
+$conf['monobook_solr_enabled'] = false;

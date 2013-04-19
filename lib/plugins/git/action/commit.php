@@ -33,7 +33,10 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
         
         // verify valid values
         switch (key($_REQUEST['cmd'])) {
-            case 'commit' : 
+            case 'commit_current' : 
+                if ($this->commit($commit_message) === false) return; 
+                break;
+            case 'commit_submit' : 
                 if ($this->commit($commit_message) === false) return; 
                 $this->helper->changeReadOnly(true);
                 $this->sendNotificationEMail();

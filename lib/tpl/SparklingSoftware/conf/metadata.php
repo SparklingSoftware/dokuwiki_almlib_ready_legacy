@@ -79,3 +79,6 @@ $meta["monobook_cite_author"]           = array("string");
 $meta["monobook_loaduserjs"]            = array("onoff");
 $meta["monobook_closedwiki"]            = array("onoff");
 
+$meta['monobook_solr_enabled'] = array('onoff');
+
+
