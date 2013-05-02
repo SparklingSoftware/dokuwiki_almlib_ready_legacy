@@ -334,6 +334,8 @@ class GitRepo {
         foreach($output as $line)
         {
             if(strpos($line, 'commit')===0){
+                // Skip merges
+                if (strpos($line, 'merge') > 0) continue;
                 if(!empty($commit)){
                     array_push($history, $commit);	
                     unset($commit);
@@ -559,9 +561,10 @@ class GitRepo {
      * @param   string $branch
      * @return  string
      */
-    public function merge($branch)
+    public function merge($branch, $msg = "")
     {
-        return $this->run("merge $branch --no-ff");
+        if ($msg == "") return $this->run("merge $branch --no-ff");
+        return $this->run("merge $branch --no-ff -m ".$msg);
     }
 
     /**

@@ -31,8 +31,16 @@ class action_plugin_git_alertcommited extends DokuWiki_Action_Plugin {
  	}
     
     function current_url(){
-        $url = (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
-        return $url;
+
+        $pageURL = 'http';
+        if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+        $pageURL .= "://";
+        if ($_SERVER["SERVER_PORT"] != "80") {
+            $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+        } else {
+            $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+        }
+        return $pageURL;        
     }
      
     function handler(&$event, $param) {
@@ -102,5 +110,4 @@ class action_plugin_git_alertcommited extends DokuWiki_Action_Plugin {
         
         return $changesAwaiting;
     }
-           
 }
