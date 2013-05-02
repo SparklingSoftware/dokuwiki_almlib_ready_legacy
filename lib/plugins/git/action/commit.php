@@ -12,6 +12,7 @@ require_once(DOKU_PLUGIN.'git/lib/Git.php');
 class action_plugin_git_commit extends DokuWiki_Action_Plugin {
     
     var $helper = null;
+    var $sqlite = null;
     
     function action_plugin_git_commit(){  
         $this->helper =& plugin_load('helper', 'git');
@@ -63,6 +64,16 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
         {
             global $conf;
             $this->getConf('');
+            
+            if (!$this->sqlite)
+            {
+                $this->initCache();
+                if (!$this->sqlite)
+                {
+                   msg('Commiting changes failed as the cache failed to initialise.', -1);
+                   return;
+                }
+            }
 
             $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
             $datapath = $conf['savedir'];    
@@ -70,11 +81,29 @@ class action_plugin_git_commit extends DokuWiki_Action_Plugin {
             $repo = new GitRepo($datapath);
             $repo->git_path = $git_exe_path;        
             $result = $repo->commit($commit_message);
+            
+            $sql = "INSERT OR REPLACE INTO git (repo, timestamp, status ) VALUES ('local', ".time().", 'alert');";
+            $this->sqlite->query($sql);
+            
             return $result;
         }
         catch(Exception $e)
         {
             msg($e->getMessage());
+            return false;
+        }
+    }
+    
+    function initCache()
+    {
+        $this->sqlite =& plugin_load('helper', 'sqlite');
+        if (is_null($this->sqlite)) {
+            msg('The sqlite plugin could not loaded from the GIT Plugin (Commit)', -1);
+            return false;
+        }
+        if($this->sqlite->init('git',DOKU_PLUGIN.'git/db/')){
+            return $this->sqlite;
+        }else{
             return false;
         }
     }

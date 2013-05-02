@@ -35,11 +35,6 @@ class helper_plugin_git extends DokuWiki_Plugin {
 
     var $dt = null;
 
-    function helper_plugin_git (){
-        $this->dt =& plugin_load('syntax', 'data_entry');
-        if(!$this->dt) msg('Loading the data table class. Make sure the data plugin is installed.',-1);
-    }
-
     function getMethods(){
         $result = array();
         $result[] = array(
@@ -55,8 +50,16 @@ class helper_plugin_git extends DokuWiki_Plugin {
     }
 
     function rebuild_data_plugin_data() {
-        // no plugin, no game...
-        if(!$this->dt) return;
+        // Load the data plugin only if we need to
+        if(!$this->dt)
+        {
+            $this->dt =& plugin_load('syntax', 'data_entry');
+            if(!$this->dt)
+            {
+                msg('Error loading the data table class from GIT Helper. Make sure the data plugin is installed.',-1);
+                return;
+            }
+        }
 
         global $conf;
         $result = '';

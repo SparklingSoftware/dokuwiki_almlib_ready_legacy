@@ -8,9 +8,23 @@ if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 require_once DOKU_PLUGIN.'action.php';
 require_once(DOKU_PLUGIN.'git/lib/Git.php');
 
-
 class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
-        
+
+    var $sqlite = null;
+    
+    function action_plugin_git_alertupstreamchanges(){  
+        $this->sqlite =& plugin_load('helper', 'sqlite');
+        if (is_null($this->sqlite)) {
+            msg('The sqlite plugin could not loaded from the GIT Plugin (Alert Upstream)', -1);
+            return false;
+        }
+        if($this->sqlite->init('git',DOKU_PLUGIN.'git/db/')){
+            return $this->sqlite;
+        }else{
+            return false;
+        }
+    }
+
 	function register(&$controller) {
 		$controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, 'handler');
  	}
@@ -55,7 +69,17 @@ class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
             $repo->fetch();
             $log = $repo->get_log();
                         
-            if ($log !== "") $updatesAvailable = true;
+            if ($log !== "")
+            {   
+                $updatesAvailable = true;
+                $sql = "INSERT OR REPLACE INTO git (repo, timestamp, status ) VALUES ('upstream', ".time().", 'alert');";
+                $this->sqlite->query($sql);
+            }
+            else
+            {
+                $sql = "INSERT OR REPLACE INTO git (repo, timestamp, status ) VALUES ('upstream', ".time().", 'clean');";
+                $this->sqlite->query($sql);
+            }
         }
         else
         {
@@ -66,12 +90,26 @@ class action_plugin_git_alertupstreamchanges extends DokuWiki_Action_Plugin {
     
     function hasCacheTimedOut()
     {
-       $hasCacheTimedOut = true;
-       return $hasCacheTimedOut;
+        $hasCacheTimedOut = false;
+
+        $res = $this->sqlite->query("SELECT timestamp FROM git WHERE repo = 'upstream';");
+        $timestamp = (int) sqlite_fetch_single($res);
+        if ($timestamp < time() - (60 * 60))  // 60 seconds x 60 minutes = 1 hour
+        { 
+            $hasCacheTimedOut = true; 
+        }
+        
+        return $hasCacheTimedOut;
     }
     
     function readUpdateStatusFromCache() {
-        return true;
+        $updatesAvailable = true;
+
+        $res = $this->sqlite->query("SELECT status FROM git WHERE repo = 'upstream'");
+        $status = sqlite_fetch_single($res);
+        if ($status === 'clean') $updatesAvailable = false;
+        
+        return $updatesAvailable;
     }
         
 }
