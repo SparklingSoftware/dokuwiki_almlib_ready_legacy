@@ -104,7 +104,7 @@ class syntax_plugin_git_remotestatus extends DokuWiki_Syntax_Plugin {
                 $log = $repo->get_log();
                 if ($log === "")
                 {
-                    $renderer->doc .= "Current wiki is up to date with Master.";
+                    $renderer->doc .= "There are no upstream updates for the current workspace. It's up to date!";
                     return true;
                 }
 

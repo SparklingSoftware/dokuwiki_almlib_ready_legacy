@@ -35,6 +35,7 @@ function git_callback_search_wanted(&$data,$base,$file,$type,$lvl,$opts) {
 class helper_plugin_git extends DokuWiki_Plugin {
 
     var $dt = null;
+    var $sqlite = null;
 
     function getMethods(){
         $result = array();
@@ -98,6 +99,66 @@ class helper_plugin_git extends DokuWiki_Plugin {
         msg('Data entry plugin found and refreshed all '.count($output).' entries after merging.');
     }    
     
+   
+    function resetGitStatusCache($repo)
+    {
+        $res = $this->loadSqlite();
+        if (!$res) 
+        {
+            msg('Error loading sqlite');
+            return;
+        }
+
+        // Set the time to zero, so the first alert msg will set the correct status
+        $sql = "INSERT OR REPLACE INTO git (repo, timestamp, status ) VALUES ('".$repo."', 0, 'clean');";
+        $this->sqlite->query($sql);
+    }
+    
+    function haveChangesBeenSubmitted()
+    {
+        $changesAwaiting = true;
+        
+        $res = $this->loadSqlite();
+        if (!$res) return;
+        
+        $res = $this->sqlite->query("SELECT status FROM git WHERE repo = 'local'");
+        $status = sqlite_fetch_single($res);
+        if ($status !== 'submitted' ) $changesAwaiting = false;
+
+        return $changesAwaiting;
+    }
+    
+    function submittChangesForApproval()
+    {
+        $res = $this->loadSqlite();
+        if (!$res) return;
+
+        // Set the time to zero, so the first alert msg will set the correct status
+        $hundred_years_into_future = time() + (60 * 60 * 24 * 365 * 100);
+        $sql = "INSERT OR REPLACE INTO git (repo, timestamp, status ) VALUES ('local', ".$hundred_years_into_future.", 'submitted');";
+        $this->sqlite->query($sql);
+        
+        $this->changeReadOnly(true);
+        $this->sendNotificationEMail();
+    }
+    
+    function sendNotificationEMail()
+    {
+        global $conf;
+        $this->getConf('');
+        
+        $notify = $conf['plugin']['git']['commit_notifcations']; 
+        $local_status_page = wl($conf['plugin']['git']['local_status_page'],'',true);
+        
+        $mail = new Mailer();
+        $mail->to($notify);
+        $mail->subject('An improvement has been submitted for approval!');
+        $mail->setBody('Please review the proposed changes before the next meeting: '.$local_status_page);
+        
+        return $mail->send();
+    }
+    
+    
     function cloneRepo($origin, $destination) {
         global $conf;
         $this->getConf('');
@@ -147,11 +208,26 @@ class helper_plugin_git extends DokuWiki_Plugin {
     
     function render_commit_selector($renderer, $commits)
     {
+        // When viewing file content differences, the hash gets set in the html request, so we can select the correct option
+        $selected_hash = trim($_REQUEST['hash']);
+        if ($selected_hash === '') $selected_hash = 'all'; // By default select "all".
+        
         $renderer->doc .= "<select id='git_commit' width=\"800\" style=\"width: 800px\" onchange='ChangeGitCommit();'>";
         $index = 1;
         foreach($commits as $commit)
         {
-            $renderer->doc .= "<option value=\"".$commit['hash']."\">".$index." - ".$commit['message']."</option>";
+            // Replace merge commit message with a more user friendly msg, leaving the orrigional
+            $raw_message = $commit['message'];
+            $pos = strpos(strtolower($raw_message), 'merge');
+            if ($pos !== false) $msg = 'Merge';
+            else $msg = $raw_message;
+            
+            // Create option in DDL
+            $renderer->doc .= "<option value=\"".$commit['hash']."\"";
+            // Is this option already selected before an html round-trip ??
+            if ($commit['hash'] === $selected_hash) $renderer->doc .= "selected=\"selected\"";  
+            if ($commit['hash'] === 'all') $renderer->doc .= ">".$msg."</option>";
+            else $renderer->doc .= ">".$index." - ".$msg."</option>";
             $index++;
         }
         $renderer->doc .= '</select>';    
@@ -159,67 +235,80 @@ class helper_plugin_git extends DokuWiki_Plugin {
     
     function render_changed_files_table($renderer, $commits, $repo)
     {
-        $divVisibility = ""; // Make the first div visible as thats the first item in the select box
+        $selected_hash = trim($_REQUEST['hash']);
+        if ($selected_hash === '') $selected_hash = 'all'; // By default select "all".
+        
         foreach($commits as $commit)
         {
+            if($commit['hash'] === $selected_hash) $divVisibility = ""; // Show the selected
+            else $divVisibility = " display:none;"; // Hide the rest
+        
             $renderer->doc .= "<div class=\"commit_div\" id='".$commit['hash']."' style=\"".$divVisibility." width: 100%;\">";
             
-            // Changes waiting to be commited
-            if ($commit == 'new')
+            // Commits selected to show changes for
+            $hash = $commit['hash'];
+            if ($hash === 'new')
             {
-                $waiting_to_commit = $repo->get_status();
-                $files = explode("\n", $waiting_to_commit);                   
+                $files = explode("\n", $repo->get_status());                   
             }
-            else   
+            else if($hash === 'all')
             {
-                // Commits selected to show changes for
-                $hash = $commit['hash'];
-                $files = explode("\n", $repo->get_files_by_commit($hash));                   
-            }            
+                $files = explode("\n", $repo->get_files_by_commit('origin/master..HEAD')); 
+            }
+            else
+            {
+                $files = explode("\n", $repo->get_files_by_commit($hash)); 
+            }
             
             // No files
-            if ($files === null)
+            if ($files === null || count($files) === 1)
             {
-               $renderer->doc .= "No files were altered in this commit. Most likely a automated merge?";
+               $renderer->doc .= "<p><br/>No files have changed for the selected item. If a merge is selected, then no conflicts were detected.</p>";
             }
+            else
+            {
+                $renderer->doc .= '<br/><h3>The content of the selected commit:</h3>';
             
-            $renderer->doc .= "<table><tr><th>Change type</th><th>Page</th><th>Changes</th></tr>";
-            foreach ($files as $file)
-            {                
-                if ($file === "") continue;
+                $renderer->doc .= "<table><tr><th>Change type</th><th>Page</th><th>Changes</th></tr>";
+                foreach ($files as $file)
+                {                
+                    if ($file === "") continue;
 
-                $renderer->doc .= "<tr><td>";
+                    $renderer->doc .= "<tr><td>";
                 
-                $change = substr($file, 0, 2);
-                if (strpos($change, '?') !== false)
-                    $renderer->doc .= "Added:";
-                else if (strpos($change, 'M') !== false)
-                    $renderer->doc .= "Modified:";
-                else if (strpos($change, 'A') !== false)
-                    $renderer->doc .= "Added:";
-                else if (strpos($change, 'D') !== false)
-                    $renderer->doc .= "Removed:";
-                else if (strpos($change, 'R') !== false)
-                    $renderer->doc .= "Removed:";
-                else if (strpos($change, 'r') !== false)
-                    $renderer->doc .= "Removed:";
+                    $change = substr($file, 0, 2);
+                    if (strpos($change, '?') !== false)
+                        $renderer->doc .= "Added:";
+                    else if (strpos($change, 'M') !== false)
+                        $renderer->doc .= "Modified:";
+                    else if (strpos($change, 'A') !== false)
+                        $renderer->doc .= "Added:";
+                    else if (strpos($change, 'D') !== false)
+                        $renderer->doc .= "Removed:";
+                    else if (strpos($change, 'R') !== false)
+                        $renderer->doc .= "Removed:";
+                    else if (strpos($change, 'r') !== false)
+                        $renderer->doc .= "Removed:";
                 
-                $renderer->doc .= "</td><td>";
-                $file = trim(substr($file, 2));
-                $page = $this->getPageFromFile($file);            
-                $renderer->doc .=  '<a href="'.DOKU_URL.'doku.php?id='.$page.'">'.$page.'</a>';
+                    $renderer->doc .= "</td><td>";
+                    $file = trim(substr($file, 2));
+                    $page = $this->getPageFromFile($file);            
+                    $renderer->doc .=  '<a href="'.DOKU_URL.'doku.php?id='.$page.'">'.$page.'</a>';
                 
-                $renderer->doc .= "</td><td>";
-                $renderer->doc .= '   <form method="post">';
-                $renderer->doc .= '      <input type="hidden" name="filename"  value="'.$file.'" />';
-                $renderer->doc .= '      <input type="hidden" name="hash"  value="'.$commit['hash'].'" />';                        
-                $renderer->doc .= '      <input type="submit" value="View Changes" />';
-                $renderer->doc .= '   </form>';
-                $renderer->doc .= "</td>";
-                $renderer->doc .= "</tr>";
+                    $renderer->doc .= "</td><td>";
+                    $renderer->doc .= '   <form method="post">';
+                    $renderer->doc .= '      <input type="hidden" name="filename"  value="'.$file.'" />';
+                    $renderer->doc .= '      <input type="hidden" name="hash"  value="'.$commit['hash'].'" />';                        
+                    $renderer->doc .= '      <input type="submit" value="View Changes" />';
+                    $renderer->doc .= '   </form>';
+                    $renderer->doc .= "</td>";
+                    $renderer->doc .= "</tr>";
+                }
+                $renderer->doc .= "</table>";
             }
-            $renderer->doc .= "</table>";
             $renderer->doc .= "</div>\n";
+            
+            // Initially, hide second and further tables
             $divVisibility = " display:none;";
         }       
     }
@@ -246,25 +335,30 @@ class helper_plugin_git extends DokuWiki_Plugin {
         
         $fileForDiff = trim($_REQUEST['filename']);                
         $page = $this->getPageFromFile($fileForDiff);
-        $hash = trim($_REQUEST['hash']);    
+        $hash = trim($_REQUEST['hash']);   
         if ($fileForDiff !== '')
         {
+            $renderer->doc .= '<div id="diff_table" class="table">';
+
             //Write header
             $renderer->doc .= '<h2>Changes to: '.$page.'</h2>';
 
-            if ($mode == 'ApproveLocal') {
-                $renderer->doc .= 'Left = The page before the selected commited retrieved from GIT <br/>';
-                $renderer->doc .= 'Right = The page after the selected commit';
+            if ($mode == 'Approve Local') {
+                if ($hash === 'all') $renderer->doc .= '<p>Left = The current page in Live<br/>';
+                else $renderer->doc .= '<p>Left = The page before the selected commited retrieved from GIT <br/>';
+                $renderer->doc .= 'Right = The page after the selected commit</p>';
                 
                 // LEFT: Find the file before for the selected commit
-                $l_text = $repo->getFile($fileForDiff, $hash."~1");
+                if ($hash === 'all') $l_text = $repo->getFile($fileForDiff, 'origin/master');
+                else $l_text = $repo->getFile($fileForDiff, $hash."~1");
 
-                // RIGHT: Find the file for the selected commit
-                $r_text = $repo->getFile($fileForDiff, $hash);
+                // RIGHT: Find the file for the selected commit   
+                if ($hash === 'all') $r_text = $repo->getFile($fileForDiff, 'HEAD');
+                else $r_text = $repo->getFile($fileForDiff, $hash);
             }
             else if ($mode == 'Commit local') {
-                $renderer->doc .= 'Left = The last page commited to GIT <br/>';
-                $renderer->doc .= 'Right = Current wiki content';
+                $renderer->doc .= '<p>Left = The last page commited to GIT <br/>';
+                $renderer->doc .= 'Right = Current wiki content</p>';
                      
                 // LEFT: Latest in GIT
                 $l_text = $repo->getFile($fileForDiff, 'HEAD');
@@ -275,8 +369,8 @@ class helper_plugin_git extends DokuWiki_Plugin {
                 $r_text = $this->getFileContents($current_filename);
             }
             else if ($mode == 'Merge upstream') {
-                $renderer->doc .= 'Left = Current wiki content<br/>';
-                $renderer->doc .= 'Right = Upstream changes to be merged';
+                $renderer->doc .= '<p>Left = Current wiki content<br/>';
+                $renderer->doc .= 'Right = Upstream changes to be merged</p>';
 
                 // LEFT:  Current
                 $current_filename = $conf['savedir'].'/'.$fileForDiff;
@@ -290,7 +384,6 @@ class helper_plugin_git extends DokuWiki_Plugin {
             // Show diff
             $df = new Diff(explode("\n",htmlspecialchars($l_text)), explode("\n",htmlspecialchars($r_text)));
             $tdf = new TableDiffFormatter();                
-            $renderer->doc .= '<div id="diff_table" class="table">';
             $renderer->doc .= '<table class="diff diff_inline">';
             $renderer->doc .= $tdf->format($df);
             $renderer->doc .= '</table>';
@@ -332,5 +425,126 @@ class helper_plugin_git extends DokuWiki_Plugin {
         fclose($handle);
 
         return $contents;
+    }
+    
+    function loadSqlite()
+    {
+        if ($this->sqlite) return true;
+
+        $this->sqlite =& plugin_load('helper', 'sqlite');
+        if (is_null($this->sqlite)) {
+            msg('The sqlite plugin could not loaded from the GIT Plugin helper', -1);
+            return false;
+        }
+        if($this->sqlite->init('git',DOKU_PLUGIN.'git/db/')){
+            return true;
+        }else{
+             msg('Submitting changes failed as the GIT cache failed to initialise.', -1);
+             return false;
+        }                 
+    }
+    
+    function hasLocalCacheTimedOut()
+    {
+        $hasCacheTimedOut = false;
+
+        $res = $this->loadSqlite();
+        if (!$res) return;
+        
+        $res = $this->sqlite->query("SELECT timestamp FROM git WHERE repo = 'local';");
+        $timestamp = (int) sqlite_fetch_single($res);
+        if ($timestamp < time() - (60 * 30))  // 60 seconds x 5 minutes
+        { 
+            $hasCacheTimedOut = true; 
+        }
+        
+        return $hasCacheTimedOut;
+    }
+    
+    function readLocalChangesAwaitingFromCache()
+    {
+        $changesAwaiting = true;
+
+        $res = $this->loadSqlite();
+        if (!$res) return;
+        
+        $res = $this->sqlite->query("SELECT status FROM git WHERE repo = 'local'");
+        $status = sqlite_fetch_single($res);
+        if ($status !== 'submitted' ) $changesAwaiting = false;
+        
+        return $changesAwaiting;
+    }
+    
+    function hasUpstreamCacheTimedOut()
+    {
+        $hasCacheTimedOut = false;
+
+        $res = $this->loadSqlite();
+        if (!$res) return;
+        
+        $res = $this->sqlite->query("SELECT timestamp FROM git WHERE repo = 'upstream';");
+        $timestamp = (int) sqlite_fetch_single($res);
+        if ($timestamp < time() - (60 * 60))  // 60 seconds x 60 minutes = 1 hour
+        { 
+            $hasCacheTimedOut = true; 
+        }
+        
+        return $hasCacheTimedOut;
+    }
+    
+    function readUpstreamStatusFromCache() {
+        $updatesAvailable = true;
+
+        $res = $this->loadSqlite();
+        if (!$res) return;
+        
+        $res = $this->sqlite->query("SELECT status FROM git WHERE repo = 'upstream'");
+        $status = sqlite_fetch_single($res);
+        if ($status === 'clean') $updatesAvailable = false;
+        
+        return $updatesAvailable;
+    }
+    
+    function CheckForUpstreamUpdates() {
+        global $conf;
+        $this->getConf('');
+
+        $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
+        $datapath = $conf['savedir'];    
+        
+        $res = $this->loadSqlite();
+        if (!$res) return;
+
+        $updatesAvailable = false;
+        if ($this->hasUpstreamCacheTimedOut())
+        {
+            $repo = new GitRepo($datapath);
+            $repo->git_path = $git_exe_path;      
+
+            if ($repo->test_origin() === false) {
+                msg('Repository seems to have an invalid remote (origin)');
+                return $updatesAvailable;
+            }
+            
+            $repo->fetch();
+            $log = $repo->get_log();
+            
+            if ($log !== "")
+            {   
+                $updatesAvailable = true;
+                $sql = "INSERT OR REPLACE INTO git (repo, timestamp, status ) VALUES ('upstream', ".time().", 'alert');";
+                $this->sqlite->query($sql);
+            }
+            else
+            {
+                $sql = "INSERT OR REPLACE INTO git (repo, timestamp, status ) VALUES ('upstream', ".time().", 'clean');";
+                $this->sqlite->query($sql);
+            }
+        }
+        else
+        {
+            $updatesAvailable = $this->readUpstreamStatusFromCache();
+        }
+        return $updatesAvailable;
     }
 }

@@ -78,9 +78,7 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
         // this return value appears in render() as the $data param there
         return $match_array;
     } 
-    
-    
-    
+        
     /**
      * Create output
      */
@@ -103,46 +101,76 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
                 $git_exe_path = $conf['plugin']['git']['git_exe_path'];
                 $datapath = $conf['savedir'];    
                 $repo = new GitRepo($datapath);
-                $repo->git_path = $git_exe_path;                
+                $repo->git_path = $git_exe_path;    
 
                 // Is there anything waiting to be commited?
                 $waiting_to_commit = $repo->get_status();
                 if ($waiting_to_commit !== "") 
                 {                    
-                    $renderer->doc .= '<h3>These are the files that have been changed:</h3>';
+                    $renderer->doc .= '<h3>These are the files that have changed:</h3>';
+                    $renderer->doc .= '<p>They have not yet been commited. In order to see all changes to the workspace, commit them and reload this page.</p>';
+
+                    // Add a semaphore commit, telling the rendering engine that this isn't a real commit, rather we want to see the current
                     $commits = array();
-                    $commits[] = "new";
-                    $this->helper->render_changed_files_table($renderer, $commits, $repo);                    
-                    $this->helper->renderChangesMade($renderer, $repo, false);
+                    if(!empty($commit)) unset($commit);
+                    $commit['hash'] = 'new';
+                    $commits[] = $commit;
                     
+                    // Render page
+                    $this->helper->render_changed_files_table($renderer, $commits, $repo);                    
+                    $this->helper->renderChangesMade($renderer, $repo, 'Commit local');                    
                     $this->renderCommitMessage($renderer, $repo);
                     
                     return;
                 }
                 
                 // No local changes to be committed. Are we ready to push up?
-                if ($repo->ChangesAwaitingApproval())
+                if ($repo->LocalCommitsExist())
                 {
-                    $renderer->doc .= '<h3>There are commits awaiting to the be pushed to Live!</h3>';        
+                    if($this->helper->haveChangesBeenSubmitted() === true)
+                    {
+                        $renderer->doc .= '<h3>There are commits awaiting to the be pushed to Live!</h3>'; 
+                        
+                        $this->helper->resetGitStatusCache('upstream');
+                        $upsptreamUpdatesAvailable = $this->helper->CheckForUpstreamUpdates();
+                        if ($upsptreamUpdatesAvailable)
+                        {
+                            $renderer->doc .= '<p>Other initiatives are approved while this has been waiting for approval. Those changes need to be merged into this workspace before these changes can be approved. Click the link in the banner on top of the screen to open the "Upstream changes" page to merge.<br/>';
+                        }
+                        else
+                        {
+                            $renderer->doc .= '<p>One or more commits have been made to this workspace that are ready to be promoted to Live!<br/>';
+                            $renderer->doc .= 'These can include merges with changes made in other workspaces and approved by the SEPG.</p>';        
+                            $this->helper->renderAdminApproval($renderer);
+                        }
 
-                    $renderer->doc .= '<p>One or more commits have been made to this workspace that are ready to be promoted to Live!<br/>';
-                    $renderer->doc .= 'These can include merges with changes made in other workspaces and approved by the SEPG.</p>';        
-                    $renderer->doc .= '<p>Please select a commit in the drop down list to view the changes contained in each.</p>';        
+                        $renderer->doc .= '<br/><br/><p>To investigate the changes made in this workspace please select a commit in the drop down list to view the changes contained in each.</p>';        
+                    }
+                    else
+                    {
+                        $renderer->doc .= '<h3>Commits have been made to this workspace that are ready for submission to the SEPG</h3>';     
+                        $renderer->doc .= '<p>TODO: add more information here</p>';     
+                        
+                        $this->renderSubmitMessage($renderer, $repo);
+                    }
 
                     // Get the list of commits since the last push
                     $log = $repo->get_log('origin/master..HEAD');
                     $commits = $repo->get_commits($log);
 
+                    // Add the "Everything" semaphore commit
+                    if(!empty($commit)) unset($commit);
+                    $commit['hash'] = 'all';
+                    $commit['message'] = 'All changes to this workspace';
+                    array_push($commits, $commit);
+
                     // Render combo-box
                     $renderer->doc .= '<br/><h3>Commits:</h3>';     
-                    $this->helper->render_commit_selector($renderer, $commits);
+                    $this->helper->render_commit_selector($renderer, $commits, true);
 
-                    $renderer->doc .= '<br/><h3>This is the content of the selected commit:</h3>';
                     $this->helper->render_changed_files_table($renderer, $commits, $repo);
-                    $this->helper->renderChangesMade($renderer, $repo, true);
+                    $this->helper->renderChangesMade($renderer, $repo, 'Approve Local');
                     
-                    $renderer->doc .= '<br/><h3>Possible actions:</h3>';
-                    $this->helper->renderAdminApproval($renderer);
                     return;
                 }                    
 
@@ -164,22 +192,32 @@ class syntax_plugin_git_localstatus extends DokuWiki_Syntax_Plugin {
     
     function renderCommitMessage(&$renderer, $repo)
     {
-        $repo->fetch();
-        $log = $repo->get_log();
-        if ($log !== "") $updatesAvailable = true;
-        else $updatesAvailable = false;
-    
-        $renderer->doc .= "<h3>Please provide a detailed summary of the changes to be submitted:</h3>";
+        $renderer->doc .= "<h3>Please enter a short summary of these intermediate changes</h3>";
+        $renderer->doc .= '<p>This short message will only be used within this workspace and is only intended to designate interim commits. You will be asked to opportunity to provide a detailed description of all the changes just before submitting this entire workspace= for approval.</p>';                
         $renderer->doc .= '<form method="post">';
         $renderer->doc .= '  <textarea name="CommitMessage" style="width: 800px; height: 80px;" ></textarea></br>';
         $renderer->doc .= '  <input type="submit" name="cmd[commit_current]"  value="Commit Current Changes" />';
-        $renderer->doc .= '  <input type="submit" name="cmd[commit_submit]"  value="Commit and Submit for approval" ';
-        if ($updatesAvailable) $renderer->doc .= ' disabled />';
-        else $renderer->doc .= '  />';
         $renderer->doc .= '</form><br/>';
-        $renderer->doc .= '<p>(Please note that submitting the changes for approval will make this workspace read-only)</p>';                
     }
     
+    function renderSubmitMessage(&$renderer, $repo)
+    {
+        $renderer->doc .= "<h3>Please provide a detailed description of ALL the changes to be submitted.</h3>";
+        $renderer->doc .= '<p>Before submitting, please consider the following: Has the content been reviewed for:';                
+        $renderer->doc .= '<ol>';                
+        $renderer->doc .= '<li>For the IP: Have all the deliverables been implemented? Please refer to the IP (link on the top of the page) to double check.</li>';                
+        $renderer->doc .= '<li>For the IP: Have you planned how the adoption of these changes is ensured? Please refer to Adption plans for more information.</li>';                
+        $renderer->doc .= '<li>For each page: Is revision frequency specified?</li>';                
+        $renderer->doc .= '<li>For each page: Is SEO metadata specified?</li>';                
+        $renderer->doc .= '<li>For each page: Are all images implemented as Imagemaps?</li>';                
+        $renderer->doc .= '</ol>';                
+
+        $renderer->doc .= '<br/><p>And finally: Please note that submitting the changes for approval will make this workspace read-only. Therefore, only submit fully completed IPs.</p>';                
+        $renderer->doc .= '<form method="post">';
+        $renderer->doc .= '  <textarea name="CommitMessage" style="width: 800px; height: 80px;" ></textarea></br>';
+        $renderer->doc .= '  <input type="submit" name="cmd[commit_submit]"  value="Submit for approval" />';
+        $renderer->doc .= '</form><br/>';
+    }
 
 
     

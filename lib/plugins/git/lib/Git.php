@@ -320,7 +320,7 @@ class GitRepo {
         }
 	}
     
-    function ChangesAwaitingApproval() {
+    function LocalCommitsExist() {
         $status = $this->get_status(false);
         $pos = strpos($status, 'Your branch is ahead of');
         return $pos > 0;            
@@ -374,7 +374,6 @@ class GitRepo {
 		return $this->run("diff-tree -r --name-status --no-commit-id ".$hash);
 	}
     
-
 	/**
 	 * Runs a `git commit` call
 	 *
