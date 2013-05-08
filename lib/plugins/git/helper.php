@@ -99,7 +99,11 @@ class helper_plugin_git extends DokuWiki_Plugin {
         msg('Data entry plugin found and refreshed all '.count($output).' entries after merging.');
     }    
     
-   
+    /**
+     * Resets a GIT cache by setting the timestamp to ZERO (1st of jan 1970)
+     *
+     * @param   string  repository name. Either: 'Local' or 'upstream'
+     */
     function resetGitStatusCache($repo)
     {
         $res = $this->loadSqlite();

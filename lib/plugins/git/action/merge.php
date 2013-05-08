@@ -28,34 +28,11 @@ class action_plugin_git_merge extends DokuWiki_Action_Plugin {
         
         // verify valid values
         switch (key($_REQUEST['cmd'])) {
-//            case 'merge' : $this->merge(); break;
             case 'merge' : $this->pull(); break;
             case 'ignore' : $this->ignore(); break;
         }   
   	}       
     
-    function merge()
-    {
-       try {
-            global $conf;
-            $this->getConf('');
-
-            $git_exe_path = $conf['plugin']['git']['git_exe_path'];        
-            $datapath = $conf['savedir'];    
-            $hash = $_REQUEST['hash'];
-            
-            $repo = new GitRepo($datapath);
-            $repo->git_path = $git_exe_path;   
-            $repo->merge($hash, "Merge");
-
-       }
-       catch(Exception $e)
-       {
-          msg($e->getMessage());
-          return false;
-       }
-    }
-
     function pull()
     {
         try {
@@ -67,14 +44,13 @@ class action_plugin_git_merge extends DokuWiki_Action_Plugin {
             
             $repo = new GitRepo($datapath);
             $repo->git_path = $git_exe_path;   
-//            $repo->fetch();
-//            $repo->merge($hash, "Merge");            
             $repo->pull('', '');
             
             if(!$this->helper) {
                 msg('GIT helper is null in the merge.php file');
                 return;
             }
+            $this->helper->resetGitStatusCache('upstream');
             $this->helper->rebuild_data_plugin_data();
         }
         catch(Exception $e)

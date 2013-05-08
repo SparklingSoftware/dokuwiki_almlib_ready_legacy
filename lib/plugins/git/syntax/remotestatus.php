@@ -91,6 +91,13 @@ class syntax_plugin_git_remotestatus extends DokuWiki_Syntax_Plugin {
 
             try
             {
+                // If not logged in, go bugger off...
+                if (is_array($INFO['userinfo']) === false)
+                {
+                    $renderer->doc .= "<br/><br/>You need to be logged in to view this page. Please login.";
+                    return;
+                }
+                
                 // Get GIT commits
                 global $conf;
                 $this->getConf('');
