@@ -96,7 +96,7 @@ class helper_plugin_git extends DokuWiki_Plugin {
             }
         }
         
-        msg('Data entry plugin found and refreshed all '.count($output).' entries after merging.');
+        msg('Data entry plugin found and refreshed all '.count($output).' entries.');
     }    
     
     /**
