@@ -244,13 +244,14 @@ class helper_plugin_git extends DokuWiki_Plugin {
         
         foreach($commits as $commit)
         {
-            if($commit['hash'] === $selected_hash) $divVisibility = ""; // Show the selected
+            $hash = $commit['hash'];
+        
+            if($hash === $selected_hash || $hash === 'new') $divVisibility = ""; // Show the selected
             else $divVisibility = " display:none;"; // Hide the rest
         
-            $renderer->doc .= "<div class=\"commit_div\" id='".$commit['hash']."' style=\"".$divVisibility." width: 100%;\">";
+            $renderer->doc .= "<div class=\"commit_div\" id='".$hash."' style=\"".$divVisibility." width: 100%;\">";
             
             // Commits selected to show changes for
-            $hash = $commit['hash'];
             if ($hash === 'new')
             {
                 $files = explode("\n", $repo->get_status());                   
