@@ -159,6 +159,7 @@
 }
 #dokuwiki__pagetools ul li a:hover {
     background-color: __background_alt__;
+    color: __text__;
 }
 
 /*____________ all available icons in sprite ____________*/
