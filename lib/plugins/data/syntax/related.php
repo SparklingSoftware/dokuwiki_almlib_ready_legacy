@@ -26,6 +26,7 @@ class syntax_plugin_data_related extends syntax_plugin_data_table {
 
         if($format != 'xhtml') return false;
         if(is_null($data)) return false;
+        if(!$this->dthlp->ready()) return false;
 
         $sqlite = $this->dthlp->_getDB();
         if(!$sqlite) return false;
@@ -34,13 +35,14 @@ class syntax_plugin_data_related extends syntax_plugin_data_table {
         $this->dthlp->_replacePlaceholdersInSQL($data);
 
         $res = $sqlite->query($data['sql']);
-        if(!sqlite_num_rows($res)) return true; // no rows matched
+        if(!$sqlite->res2count($res)) return true; // no rows matched
+        $rows = $sqlite->res2arr($res);
 
         $renderer->doc .= '<dl class="'.$data['classes'].'">';
         $renderer->doc .= '<dt>'.htmlspecialchars($data['title']).'</dt>';
         $renderer->doc .= '<dd>';
         $renderer->listu_open();
-        while ($row = sqlite_fetch_array($res, SQLITE_ASSOC)) {
+        foreach ($rows as $row) {
             $renderer->listitem_open(1);
             $renderer->internallink($row['page']);
             $renderer->listitem_close();
@@ -80,15 +82,14 @@ class syntax_plugin_data_related extends syntax_plugin_data_table {
                        AND A.pid = B.pid
                        AND B.page = ?";
             $res = $sqlite->query($sql,$col,$id);
-            while ($row = sqlite_fetch_array($res, SQLITE_NUM)) {
-                if($row[0]) $values[] = $row[0];
+            while($value = $sqlite->res_fetch_assoc($res)){
+                $values[] = $value['value'];
             }
             if(!count($values)) continue; // no values? ignore the column.
             $found = true;
-            $values = array_map('sqlite_escape_string',$values);
 
-            $cond[] = " ( T1.key = '".sqlite_escape_string($col)."'".
-                      " AND T1.value IN ('".join("','",$values)."') )\n";
+            $cond[] = " ( T1.key = ".$sqlite->quote_string($col).
+                      " AND T1.value IN (".$sqlite->quote_and_join($values,',').") )\n";
         }
         $where .= ' AND ('.join(' OR ',$cond).') ';
 
@@ -108,7 +109,7 @@ class syntax_plugin_data_related extends syntax_plugin_data_table {
                 if(!$tables[$col]){
                     $tables[$col] = 'T'.(++$cnt);
                     $from  .= ' LEFT JOIN data AS '.$tables[$col].' ON '.$tables[$col].'.pid = pages.pid';
-                    $from  .= ' AND '.$tables[$col].".key = '".sqlite_escape_string($col)."'";
+                    $from  .= ' AND '.$tables[$col].".key = ".$sqlite->quote_string($col);
                 }
 
                 $order = ', '.$tables[$col].'.value '.$data['sort'][1];
@@ -133,7 +134,7 @@ class syntax_plugin_data_related extends syntax_plugin_data_table {
                     if(!$tables[$col]){
                         $tables[$col] = 'T'.(++$cnt);
                         $from  .= ' LEFT JOIN data AS '.$tables[$col].' ON '.$tables[$col].'.pid = pages.pid';
-                        $from  .= ' AND '.$tables[$col].".key = '".sqlite_escape_string($col)."'";
+                        $from  .= ' AND '.$tables[$col].".key = ".$sqlite->quote_string($col);
                     }
 
                     $where .= ' '.$filter['logic'].' '.$tables[$col].'.value '.$filter['compare'].
@@ -148,7 +149,7 @@ class syntax_plugin_data_related extends syntax_plugin_data_table {
         $sql = "SELECT pages.pid, pages.page as page, pages.title as title, COUNT(*) as rel
                   FROM pages, data as T1 $from
                  WHERE pages.pid = T1.pid
-                   AND pages.page != '".sqlite_escape_string($id)."'
+                   AND pages.page != ".$sqlite->quote_string($id)."
                        $where
               GROUP BY pages.pid
               ORDER BY rel DESC$order";

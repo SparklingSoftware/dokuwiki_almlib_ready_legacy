@@ -11,27 +11,17 @@
 if (!defined('DOKU_INC') || !defined('DOKU_PLUGIN')) die();
 
 require_once(DOKU_PLUGIN . 'syntax.php');
-require_once(DOKU_PLUGIN . 'refnotes/info.php');
-require_once(DOKU_PLUGIN . 'refnotes/namespace.php');
+require_once(DOKU_PLUGIN . 'refnotes/core.php');
 
 class syntax_plugin_refnotes_notes extends DokuWiki_Syntax_Plugin {
 
     private $mode;
-    private $core;
 
     /**
      * Constructor
      */
     public function __construct() {
         $this->mode = substr(get_class($this), 7);
-        $this->core = NULL;
-    }
-
-    /**
-     * Return some info
-     */
-    public function getInfo() {
-        return refnotes_getInfo('notes syntax');
     }
 
     /**
@@ -54,8 +44,8 @@ class syntax_plugin_refnotes_notes extends DokuWiki_Syntax_Plugin {
 
     public function connectTo($mode) {
         $this->Lexer->addSpecialPattern('~~REFNOTES.*?~~', $mode, $this->mode);
-        $this->Lexer->addSpecialPattern('<refnotes.*?\/>', $mode, $this->mode);
-        $this->Lexer->addSpecialPattern('<refnotes(?:.*?[^/])?>.*?<\/refnotes>', $mode, $this->mode);
+        $this->Lexer->addSpecialPattern('<refnotes[^>]*?\/>', $mode, $this->mode);
+        $this->Lexer->addSpecialPattern('<refnotes(?:[^>]*?[^/>])?>.*?<\/refnotes>', $mode, $this->mode);
     }
 
     /**
@@ -81,7 +71,11 @@ class syntax_plugin_refnotes_notes extends DokuWiki_Syntax_Plugin {
             if($mode == 'xhtml') {
                 switch ($data[0]) {
                     case 'style':
-                        $this->styleNamespace($renderer, $data[1], $data[2]);
+                        refnotes_renderer_core::getInstance()->styleNamespace($data[1]['ns'], $data[2]);
+                        break;
+
+                    case 'map':
+                        refnotes_renderer_core::getInstance()->setNamespaceMapping($data[1]['ns'], $data[2]);
                         break;
 
                     case 'render':
@@ -131,24 +125,39 @@ class syntax_plugin_refnotes_notes extends DokuWiki_Syntax_Plugin {
      *
      */
     private function parseAttributes($syntax) {
-        static $propertyMatch = array(
-            'ns' => '/^(:|:*([[:alpha:]]\w*:+)*?[[:alpha:]]\w*:*)$/',
+        $propertyMatch = array(
+            'ns' => '/^' . refnotes_namespace::getNamePattern('required') . '$/',
             'limit' => '/^\/?\d+$/'
         );
 
-        $attribute = array('ns' => ':');
-        $token = preg_split('/\s+/', $syntax);
+        $attribute = array();
+        $token = preg_split('/\s+/', $syntax, -1, PREG_SPLIT_NO_EMPTY);
         foreach ($token as $t) {
             foreach ($propertyMatch as $name => $pattern) {
                 if (preg_match($pattern, $t) == 1) {
-                    $attribute[$name] = $t;
+                    $attribute[$name][] = $t;
                     break;
                 }
             }
         }
 
-        /* Ensure that namespaces are in canonic form */
-        $attribute['ns'] = refnotes_canonizeNamespace($attribute['ns']);
+        if (array_key_exists('ns', $attribute)) {
+            /* Ensure that namespaces are in canonic form */
+            $attribute['ns'] = array_map('refnotes_namespace::canonizeName', $attribute['ns']);
+
+            if (count($attribute['ns']) > 1) {
+                $attribute['map'] = array_slice($attribute['ns'], 1);
+            }
+
+            $attribute['ns'] = $attribute['ns'][0];
+        }
+        else {
+            $attribute['ns'] = ':';
+        }
+
+        if (array_key_exists('limit', $attribute)) {
+            $attribute['limit'] = end($attribute['limit']);
+        }
 
         return $attribute;
     }
@@ -175,7 +184,7 @@ class syntax_plugin_refnotes_notes extends DokuWiki_Syntax_Plugin {
 
         /* Ensure that namespaces are in canonic form */
         if (array_key_exists('inherit', $style)) {
-            $style['inherit'] = refnotes_canonizeNamespace($style['inherit']);
+            $style['inherit'] = refnotes_namespace::canonizeName($style['inherit']);
         }
 
         return $style;
@@ -184,34 +193,14 @@ class syntax_plugin_refnotes_notes extends DokuWiki_Syntax_Plugin {
     /**
      *
      */
-    private function styleNamespace($renderer, $attribute, $style) {
-        $this->getCore()->styleNamespace($attribute['ns'], $style);
-    }
-
-    /**
-     *
-     */
     private function renderNotes($renderer, $attribute) {
         $limit = array_key_exists('limit', $attribute) ? $attribute['limit'] : '';
-        $html = $this->getCore()->renderNotes($attribute['ns'], $limit);
+        $html = refnotes_renderer_core::getInstance()->renderNotes($attribute['ns'], $limit);
+
         if ($html != '') {
             $renderer->doc .= '<div class="refnotes">' . DOKU_LF;
             $renderer->doc .= $html;
             $renderer->doc .= '</div>' . DOKU_LF;
         }
-    }
-
-    /**
-     *
-     */
-    private function getCore() {
-        if ($this->core == NULL) {
-            $this->core = plugin_load('helper', 'refnotes');
-            if ($this->core == NULL) {
-                throw new Exception('Helper plugin "refnotes" is not available or invalid.');
-            }
-        }
-
-        return $this->core;
     }
 }

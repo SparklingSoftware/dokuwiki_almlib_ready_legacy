@@ -12,6 +12,7 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
 
     /**
      * will hold the data helper plugin
+     * @var $dthlp helper_plugin_data
      */
     var $dthlp = null;
 
@@ -61,6 +62,9 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
         $pagesjoin = '';
         $tables = array();
 
+        $sqlite = $this->dthlp->_getDB();
+        if(!$sqlite) return false;
+
         $fields = array('pageid' => 'page', 'class' => 'class',
                        'title' => 'title');
         // prepare filters (no request filters - we set them ourselves)
@@ -78,7 +82,7 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
                     if(!$tables[$col]){
                         $tables[$col] = 'T'.(++$cnt);
                         $from  .= ' LEFT JOIN data AS '.$tables[$col].' ON '.$tables[$col].'.pid = data.pid';
-                        $from  .= ' AND '.$tables[$col].".key = '".sqlite_escape_string($col)."'";
+                        $from  .= ' AND '.$tables[$col].".key = ".$sqlite->quote_string($col);
                     }
 
                     $where .= ' '.$filter['logic'].' '.$tables[$col].'.value '.$filter['compare'].
@@ -90,7 +94,7 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
         // build query
         $sql = "SELECT data.value, COUNT(data.pid) as cnt
                   FROM data $from $pagesjoin
-                 WHERE data.key = '".sqlite_escape_string($ckey)."'
+                 WHERE data.key = ".$sqlite->quote_string($ckey)."
                  $where
               GROUP BY data.value";
         if(isset($data['min']))   $sql .= ' HAVING cnt >= '.$data['min'];
@@ -100,6 +104,11 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
         return $sql;
     }
 
+    protected $before_item = '<ul class="dataplugin_cloud %s">';
+    protected $after_item  = '</ul>';
+    protected $before_val  = '<li class="cl%s">';
+    protected $after_val   = '</li>';
+
     /**
      * Create output or save the data
      */
@@ -107,8 +116,9 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
         global $ID;
 
         if($format != 'xhtml') return false;
-        $renderer->info['cache'] = false;
         if(is_null($data)) return;
+        if(!$this->dthlp->ready()) return false;
+        $renderer->info['cache'] = false;
 
         $sqlite = $this->dthlp->_getDB();
         if(!$sqlite) return false;
@@ -121,27 +131,28 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
         $this->dthlp->_replacePlaceholdersInSQL($data);
 
         // build cloud data
-        $tags = array();
         $res = $sqlite->query($data['sql']);
+        $rows = $sqlite->res2arr($res);
         $min = 0;
         $max = 0;
-        while ($row = sqlite_fetch_array($res, SQLITE_NUM)) {
-            if(!$max) $max  = $row[1];
-            $min  = $row[1];
-            $tags[$row[0]] = $row[1];
+        $tags = array();
+        foreach ($rows as $row) {
+            if(!$max) $max  = $row['cnt'];
+            $min  = $row['cnt'];
+            $tags[$row['value']] = $row['cnt'];
         }
         $this->_cloud_weight($tags,$min,$max,5);
 
         // output cloud
-        $renderer->doc .= '<ul class="dataplugin_cloud '.hsc($data['classes']).'">';
+        $renderer->doc .= sprintf($this->before_item,hsc($data['classes']));
         foreach($tags as $tag => $lvl){
-            $renderer->doc .= '<li class="cl'.$lvl.'">';
-            $renderer->doc .= '<a href="'.wl($data['page'],array('datasrt'=>$_REQUEST['datasrt'],
-                                                                 'dataflt[]'=>"$ckey=$tag" )).
-                              '" title="'.sprintf($this->getLang('tagfilter'),hsc($tag)).'" class="wikilink1">'.hsc($tag).'</a>';
-            $renderer->doc .= '</li>';
+            $renderer->doc .= sprintf($this->before_val,$lvl);
+            $renderer->doc .= '<a href="'.wl($data['page'], $this->dthlp->_getTagUrlparam($data['cols'][$ckey], $tag)).
+                              '" title="'.sprintf($this->getLang('tagfilter'),hsc($tag)).
+                              '" class="wikilink1">'.hsc($tag).'</a>';
+            $renderer->doc .= $this->after_val;
         }
-        $renderer->doc .= '</ul>';
+        $renderer->doc .= $this->after_item;
         return true;
     }
 
@@ -149,7 +160,7 @@ class syntax_plugin_data_cloud extends syntax_plugin_data_table {
     /**
      * Create a weighted tag distribution
      *
-     * @param $tag arrayref The tags to weight ( tag => count)
+     * @param $tags array ref The tags to weight ( tag => count)
      * @param $min int      The lowest count of a single tag
      * @param $max int      The highest count of a single tag
      * @param $levels int   The number of levels you want. A 5 gives levels 0 to 4.

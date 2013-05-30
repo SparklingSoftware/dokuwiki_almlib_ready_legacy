@@ -33,7 +33,20 @@ class action_plugin_data extends DokuWiki_Action_Plugin {
         $controller->register_hook('HTML_EDIT_FORMSELECTION', 'BEFORE', $this, '_editform');
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, '_handle_edit_post');
         $controller->register_hook('AJAX_CALL_UNKNOWN', 'BEFORE', $this, '_handle_ajax');
+		$controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, '_handle_refresh_data');
     }
+    
+    function _handle_refresh_data(&$event, $param) {
+
+        if ($_REQUEST['cmd'] === null) return;
+
+        // verify valid values
+        switch (key($_REQUEST['cmd'])) {
+            case 'refresh_data' : 
+                $this->dthlp->rebuild_data();
+                break;
+        }   
+    }    
 
     /**
      * Handles the page write event and removes the database info
@@ -49,7 +62,7 @@ class action_plugin_data extends DokuWiki_Action_Plugin {
 
         // get page id
         $res = $sqlite->query('SELECT pid FROM pages WHERE page = ?',$id);
-        $pid = (int) sqlite_fetch_single($res);
+        $pid = (int) $sqlite->res2single($res);
         if(!$pid) return; // we have no data for this page
 
         $sqlite->query('DELETE FROM data WHERE pid = ?',$pid);
@@ -101,17 +114,20 @@ class action_plugin_data extends DokuWiki_Action_Plugin {
     }
 
     function _handle_ajax($event) {
-        if (strpos($event->data, 'data_page_') !== 0) {
+        if ($event->data !== 'data_page') {
             return;
         }
+        $event->stopPropagation();
         $event->preventDefault();
 
-        $type = substr($event->data, 10);
+        $type = substr($_REQUEST['aliastype'], 10);
         $aliases = $this->dthlp->_aliases();
+
         if (!isset($aliases[$type])) {
             echo 'Unknown type';
             return;
         }
+
         if ($aliases[$type]['type'] !== 'page') {
             echo 'AutoCompletion is only supported for page types';
             return;
@@ -123,7 +139,7 @@ class action_plugin_data extends DokuWiki_Action_Plugin {
             $aliases[$type]['postfix'] .= $conf['start'];
         }
 
-        $search = $_POST['search'];
+        $search = $_REQUEST['search'];
 
         $c_search = $search;
         $in_ns = false;
@@ -168,6 +184,6 @@ class action_plugin_data extends DokuWiki_Action_Plugin {
         }
 
         $json = new JSON();
-        echo '(' . $json->encode($result) . ')';
+        echo $json->encode($result);
     }
 }

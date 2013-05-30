@@ -40,11 +40,14 @@ class syntax_plugin_rigrr extends DokuWiki_Syntax_Plugin {
         if($mode == 'xhtml'){
             list($match,$state,$pos) = $data;
             if ($state != DOKU_LEXER_UNMATCHED) return false; 
+            
+            $rigrr_id = rand();
+            msg($rigrr_id);
 
-            $renderer->doc .= '<textarea id="rigrr_bpmn" style="visibility:hidden;">';
+            $renderer->doc .= '<textarea id="rigrr_bpmn" tag="'.$rigrr_id.'" style="visibility:hidden;">';
             $renderer->doc .= trim($match);
             $renderer->doc .= '</textarea>';
-            $renderer->doc .= '<div id="rigrr_canvas"></div>';
+            $renderer->doc .= '<div id="rigrr_canvas'.$rigrr_id.'"></div>';
 
             return true;
         }

@@ -15,20 +15,6 @@ require_once DOKU_INC . 'inc/parser/xhtml.php';
  */
 class renderer_plugin_xbr extends Doku_Renderer_xhtml {
 
-    /**
-     * return some info
-     */
-    function getInfo(){
-      return array(
-        'author' => 'Christopher Smith',
-        'email'  => 'chris@jalakai.co.uk',
-        'date'   => '2008-11-11',
-        'name'   => 'XBR',
-        'desc'   => 'XHTML renderer with line break preservation.',
-        'url'    => 'http://www.dokuwiki.org/plugin:xbr',
-      );
-    }
-
     function canRender($format) {
       return ($format=='xhtml');
     }
@@ -42,7 +28,7 @@ class renderer_plugin_xbr extends Doku_Renderer_xhtml {
     }
 
     function cdata($text) {
-        $this->doc .= str_replace("\n",'<br />',$this->_xmlEntities($text));
+        $this->doc .= str_replace("\n","<br />\n",$this->_xmlEntities($text));
     }
 
 }

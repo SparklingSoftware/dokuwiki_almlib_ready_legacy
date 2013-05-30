@@ -1,7 +1,7 @@
-﻿base     monobook
-author   Andreas Haerter
-email    development@andreas-haerter.com
-date     2011-12-10
-name     monobook template
-desc     monobook brings you the traditional MediaWiki/Wikipedia look and feel for DokuWiki
-url      http://andreas-haerter.com/projects/dokuwiki-template-monobook
+base     dokuwiki
+author   Anika Henke
+email    anika@selfthinker.org
+date     2013-05-02
+name     DokuWiki Template
+desc     DokuWiki's default template since 2012
+url      http://www.dokuwiki.org/template:dokuwiki
