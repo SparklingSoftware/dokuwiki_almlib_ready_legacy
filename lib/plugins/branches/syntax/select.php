@@ -9,6 +9,7 @@ require_once(DOKU_PLUGIN.'syntax.php');
 class syntax_plugin_branches_select extends DokuWiki_Syntax_Plugin {
 
     var $branch_helper = null;
+    var $jiradata = null;
     
     function syntax_plugin_branches_select(){        
         $this->branch_helper =& plugin_load('helper', 'branches');
@@ -70,12 +71,25 @@ class syntax_plugin_branches_select extends DokuWiki_Syntax_Plugin {
         return $match_array;
     }
     
+    function loadJiraData()
+    {
+        if ($this->jiradata) return true;
+
+        $this->jiradata =& plugin_load('helper', 'jiradata');
+        if (is_null($this->jiradata)) {
+            msg('The jiradata plugin could not loaded from the branches plugin (select)', -1);
+            return false;
+        }
+    }
     
     /**
      * Create output
      */
     function render($format, &$renderer, $data) {
         global $conf;
+        
+        $res = $this->loadJiraData();
+        if (!$res) return;
         
         if($format == 'xhtml'){
 
@@ -91,7 +105,9 @@ class syntax_plugin_branches_select extends DokuWiki_Syntax_Plugin {
             $branches = $this->branch_helper->getBranches();
             foreach ($branches as $branche)
             {
-                $renderer->doc .= "<option>".$branche."</option>";
+                $summary = $this->jiradata->getSummary($branche);
+                if (!summary) $renderer->doc .= "<option>".$branche." - ".$summary."</option>";
+                else $renderer->doc .= "<option>".$branche."</option>";
             }
             $renderer->doc .= "<option>Create new</option>";
             $renderer->doc .= "</select></br>";

@@ -173,6 +173,8 @@ class helper_plugin_git extends DokuWiki_Plugin {
             $repo = new GitRepo($destination, true, false);
             $repo->git_path = $git_exe_path;
             $repo->clone_from($origin);
+            
+            
         }
         catch (Exception $e)
         {
@@ -456,8 +458,10 @@ class helper_plugin_git extends DokuWiki_Plugin {
         $res = $this->loadSqlite();
         if (!$res) return;
         
-        $res = $this->sqlite->query("SELECT timestamp FROM git WHERE repo = 'local';");
-        $timestamp = (int) sqlite_fetch_single($res);
+        $sql = "SELECT timestamp FROM git WHERE repo = 'local'";
+        $res = $this->sqlite->query($sql);
+        $rows = $this->sqlite->res2arr($res);
+        $timestamp = $rows[0]['timestamp'];        
         if ($timestamp < time() - (60 * 30))  // 60 seconds x 5 minutes
         { 
             $hasCacheTimedOut = true; 
@@ -473,8 +477,10 @@ class helper_plugin_git extends DokuWiki_Plugin {
         $res = $this->loadSqlite();
         if (!$res) return;
         
-        $res = $this->sqlite->query("SELECT status FROM git WHERE repo = 'local'");
-        $status = sqlite_fetch_single($res);
+        $sql = "SELECT status FROM git WHERE repo = 'local'";
+        $res = $this->sqlite->query($sql);
+        $rows = $this->sqlite->res2arr($res);
+        $status = $rows[0]['status'];        
         if ($status !== 'submitted' ) $changesAwaiting = false;
         
         return $changesAwaiting;
@@ -487,8 +493,10 @@ class helper_plugin_git extends DokuWiki_Plugin {
         $res = $this->loadSqlite();
         if (!$res) return;
         
-        $res = $this->sqlite->query("SELECT timestamp FROM git WHERE repo = 'upstream';");
-        $timestamp = (int) sqlite_fetch_single($res);
+        $sql = "SELECT timestamp FROM git WHERE repo = 'upstream';";
+        $res = $this->sqlite->query($sql);
+        $rows = $this->sqlite->res2arr($res);
+        $timestamp = $rows[0]['timestamp'];        
         if ($timestamp < time() - (60 * 60))  // 60 seconds x 60 minutes = 1 hour
         { 
             $hasCacheTimedOut = true; 
@@ -503,8 +511,10 @@ class helper_plugin_git extends DokuWiki_Plugin {
         $res = $this->loadSqlite();
         if (!$res) return;
         
-        $res = $this->sqlite->query("SELECT status FROM git WHERE repo = 'upstream'");
-        $status = sqlite_fetch_single($res);
+        $sql = "SELECT status FROM git WHERE repo = 'upstream'";
+        $res = $this->sqlite->query($sql);
+        $rows = $this->sqlite->res2arr($res);
+        $status = $rows[0]['status'];        
         if ($status === 'clean') $updatesAvailable = false;
         
         return $updatesAvailable;

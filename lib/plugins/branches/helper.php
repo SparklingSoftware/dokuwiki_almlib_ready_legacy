@@ -18,19 +18,28 @@ class helper_plugin_branches extends DokuWiki_Plugin {
 
     var $jira = null;
     var $git = null;
-    
-    function helper_plugin_branches(){        
-        $this->jira =& plugin_load('helper', 'jiradata');
-        if (is_null($this->jira)) {
+
+    function loadJiradataPlugin() {
+
+       $this->jira =& plugin_load('helper', 'jiradata');
+       if (is_null($this->jira)) {
             msg('The branches plugin needs the jiradata plugin which cannot be loaded', -1);
             return false;
-        }     
-        
+       }     
+
+    }
+    
+    function loadGITPlugin() {
         $this->git =& plugin_load('helper', 'git');
         if (is_null($this->git)) {
             msg('The branches plugin needs the git plugin which cannot be loaded', -1);
             return false;
         }   
+    }
+    
+    function helper_plugin_branches(){        
+        $this->loadJiradataPlugin();
+        $this->loadGITPlugin();
     }
     
     function createBranch($branch_id)
@@ -116,8 +125,7 @@ class helper_plugin_branches extends DokuWiki_Plugin {
         $this->getConf('');
 
         if ($this->jira === null) return;
-        $jql = $conf['plugin']['branches']['jql'];
-        $improvements = $this->jira->getData($jql);
+        $improvements = $this->jira->getAllIssues(false);
         return $improvements;
     }
 
