@@ -59,7 +59,6 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
             }
             
             $jql = "project = ".$jira_project." and key = ".$key;
-            msg("jql:".$jql);
             $issues =  $this->getIssues($jql);
         }
         else {
@@ -258,7 +257,6 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
 
         // Set the time to zero, so the first alert msg will set the correct status
         $sql = "INSERT OR REPLACE INTO jiradata (key, summary, description, timestamp) VALUES ('".$safe_key."', '".$safe_summary."', '".$safe_description."', ".time().");";
-        msg($sql);
         $this->sqlite->query($sql);
     }        
 
