@@ -35,25 +35,35 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
     // The summary is the issue title
     function getSummary($key)
     {
-        $this->getIssue($key);
-        $summary = $issue["title"];
+        $issue = $this->getIssue($key);
+        if (!$summary) return $key;        
 
+        $summary = $issue["title"];
         if (!$summary) return $key;        
         return $summary;        
     }
     
     function getIssue($key) {
+    
+    
         $cache_has_timed_out = $this->hasLocalCacheTimedOut($key);
         if ($cache_has_timed_out) {
-            $issues = $this->getIssuesFromCache($key);
-        }
-        else {
             global $conf;
             $this->getConf('');
-            $project = $conf['plugin']['jiradata']['jira_project'];        
+            $jira_project = $conf['plugin']['jiradata']['jira_project'];
+            $issue_id_prefix = $conf['plugin']['jiradata']['jira_issue_id_prefix'];    
+
+            // Does this key start with the jira issue id prefix ?
+            if (strncmp($key, $issue_id_prefix, strlen($issue_id_prefix))) {
+               return null; // No               
+            }
             
-            $jql = "project = ".$project." and key = ".$key;
+            $jql = "project = ".$jira_project." and key = ".$key;
+            msg("jql:".$jql);
             $issues =  $this->getIssues($jql);
+        }
+        else {
+            $issues = $this->getIssuesFromCache($key);
         }
         
         // There should only be one
@@ -108,13 +118,13 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
         }
         
         // Get all issue from sqlite
-        if ($key === "") $sql = "SELECT * FROM jiradata";
-        else $sql = "SELECT * FROM jiradata WHERE KEY='".$key."'";        
-
+        if ($key === "") $sql = "SELECT key, summary, description FROM jiradata";
+        else $sql = "SELECT key, summary, description FROM jiradata WHERE key='".$key."'";        
+        
         $res = $this->sqlite->query($sql);
         $datarows = $this->sqlite->res2arr($res);
         foreach($datarows as $datarow) {
-                
+               
             $resultrow = array(
                             "key" => $datarow['key'], 
                             "title" => $datarow['summary'], 
@@ -219,8 +229,8 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
         if (!$res) return;
         
         $safe_key = sqlite_escape_string($key);
-        if ($safe_key !== "") $sql = "SELECT * FROM jiradata WHERE key = '".$safe_key."' ORDER BY timestamp ASC";
-        else $sql = "SELECT * FROM jiradata ORDER BY timestamp ASC";
+        if ($safe_key !== "") $sql = "SELECT timestamp FROM jiradata WHERE key = '".$safe_key."' ORDER BY timestamp ASC";
+        else $sql = "SELECT timestamp FROM jiradata ORDER BY timestamp ASC";
         
         $res = $this->sqlite->query($sql);
         $rows = $this->sqlite->res2arr($res);
