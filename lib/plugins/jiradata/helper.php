@@ -36,7 +36,7 @@ class helper_plugin_jiradata extends DokuWiki_Plugin {
     function getSummary($key)
     {
         $issue = $this->getIssue($key);
-        if (!$summary) return $key;        
+        if (!$issue) return $key;        
 
         $summary = $issue["title"];
         if (!$summary) return $key;        
