@@ -200,8 +200,8 @@ class syntax_plugin_imagemapzoom extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= '<script type="text/javascript" src="lib/scripts/jquery/jquery.min.js"></script>';
         $renderer->doc .= '<script type="text/javascript" src="lib/plugins/imagemapzoom/js/jquery-ui.min.js"></script>';
         $renderer->doc .= '<script type="text/javascript" src="lib/plugins/imagemapzoom/js/jquery.mousewheel.js"></script>';
-        $renderer->doc .= '<script type="text/javascript" src="lib/scripts/jquery/jquery-ui.min.js"></script>';
-//        $renderer->doc .= '<script type="text/javascript" src="lib/plugins/imagemapzoom/js/jquery.zoomable-1.1.js"></script>';
+//        $renderer->doc .= '<script type="text/javascript" src="lib/scripts/jquery/jquery-ui.min.js"></script>';
+        $renderer->doc .= '<script type="text/javascript" src="lib/plugins/imagemapzoom/js/jquery.zoomable-1.1.js"></script>';
 
         $renderer->doc .= '<script type="text/javascript">';
         $renderer->doc .= '    /* <![CDATA[ */';
