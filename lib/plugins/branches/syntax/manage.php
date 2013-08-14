@@ -98,7 +98,15 @@ class syntax_plugin_branches_manage extends DokuWiki_Syntax_Plugin {
             $branches = $this->branch_helper->getBranches();
             
             $renderer->doc .= '<div class="table"><table>';
-            $renderer->doc .=  "<tr><th>Improvement</th><th>Create</th><th>Edit</th><th>Remove</th></tr>";
+            if ($INFO["isadmin"] )
+            {
+                $renderer->doc .=  "<tr><th>Improvement</th><th>Create</th><th>Edit</th><th>Remove</th></tr>";
+            }
+            else
+            {
+                $renderer->doc .=  "<tr><th>Improvement</th><th>Create</th><th>Edit</th></tr>";
+            }
+            
             foreach ($improvements as $improvement)
             {
                 
@@ -115,7 +123,10 @@ class syntax_plugin_branches_manage extends DokuWiki_Syntax_Plugin {
                     // The improvement has a branch
                     $renderer->doc .= "<td></td>";
                     $renderer->doc .= "<td><a href=\"".$go_to_branch_url."\">Contribute to this initiative</a></td>";
-                    $renderer->doc .= "<td><a href=\"".$remove_branch_url."\">Remove the branch</a></td>";
+                    if ($INFO["isadmin"] )
+                    {                        
+                        $renderer->doc .= "<td><a href=\"".$remove_branch_url."\">Remove the branch</a></td>";
+                    }
                 }
                 else
                 {
