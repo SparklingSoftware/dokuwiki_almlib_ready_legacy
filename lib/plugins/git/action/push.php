@@ -34,6 +34,7 @@ class action_plugin_git_push extends DokuWiki_Action_Plugin {
             case 'push' : 
                 $this->push(); 
                 $this->helper->changeReadOnly(false);
+                $this->helper->resetGitStatusCache('local');
                 $this->redirect();
                 break;
        }   
