@@ -126,7 +126,8 @@ class helper_plugin_git extends DokuWiki_Plugin {
         if (!$res) return;
         
         $res = $this->sqlite->query("SELECT status FROM git WHERE repo = 'local'");
-        $status = sqlite_fetch_single($res);
+        $rows = $this->sqlite->res2arr($res);
+        $status = $rows[0]['status'];
         if ($status !== 'submitted' ) $changesAwaiting = false;
 
         return $changesAwaiting;
