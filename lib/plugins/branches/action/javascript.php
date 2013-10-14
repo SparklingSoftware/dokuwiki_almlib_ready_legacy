@@ -48,7 +48,6 @@ class action_plugin_branches_javascript extends DokuWiki_Action_Plugin {
        $data = $this->switch_branch_javascript();
        ptln($data);
 
-        msg(DOKU_URL);
         if (strpos(DOKU_URL, 'Live') <= 0)
         { 
            $data = $this->noindex_for_nonlive_workspaces();
