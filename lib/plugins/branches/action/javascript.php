@@ -36,16 +36,19 @@ class action_plugin_branches_javascript extends DokuWiki_Action_Plugin {
         
         return $script;
     }
-    
-	function _hook_header(&$event, $param) {
-		$data = $this->switch_branch_javascript();
-        ptln($data);
 
-		//$event->data['script'][] = array(
-		//	'type' => 'text/javascript',
-		//	'charset' => 'utf-8',
-		//	'_data' => $data,
-		//);
-	}
+    function noindex_for_nonlive_workspaces()
+    {
+        $script = '<META NAME="robots" CONTENT="noindex">';
+        return $script;
+    }
+
     
+    function _hook_header(&$event, $param) {
+       $data = $this->switch_branch_javascript();
+       ptln($data);
+
+	  $data = $this->noindex_for_nonlive_workspaces();
+       ptln($data);
+    }    
 }
