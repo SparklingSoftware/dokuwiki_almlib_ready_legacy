@@ -221,6 +221,7 @@ class helper_plugin_git extends DokuWiki_Plugin {
         
         $renderer->doc .= "<select id='git_commit' width=\"800\" style=\"width: 800px\" onchange='ChangeGitCommit();'>";
         $index = 1;
+        $renderer->doc .= "<option>Select a commit</option>";
         foreach($commits as $commit)
         {
             // Replace merge commit message with a more user friendly msg, leaving the orrigional
@@ -386,7 +387,7 @@ class helper_plugin_git extends DokuWiki_Plugin {
                 $l_text = $this->getFileContents($current_filename);                     
 
                 // RIGHT: Latest in GIT to be merged
-                $l_text = $repo->getFile($fileForDiff, 'HEAD');
+                $r_text = $repo->getFile($fileForDiff, $hash);
             }
                         
             // Show diff
